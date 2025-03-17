@@ -3,4 +3,6 @@
     <string name="logoimage">LogoImage</string>
     <string name="button_text">Crear una cuenta</string>
     <string name="bienvenido">Bienvenido!</string>
+    <string name="iniciar_sesion">Iniciar sesión</string>
+    <string name="reservar">Reservar</string>
 </resources>

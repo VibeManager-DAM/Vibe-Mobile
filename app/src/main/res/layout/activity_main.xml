@@ -25,16 +25,17 @@
         android:text="Etiam molestie turpis tortor, vel porttitor est gravida mollis."
         android:textSize="18sp"/>
 
-    <Button
-        android:id="@+id/my_button"
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_iniciarSesion"
+        style="@style/CustomButton"
+        android:layout_width="354dp"
         android:layout_height="69dp"
-        android:textSize="20sp"
-        android:text="@string/button_text"
         android:layout_gravity="center"
-        android:layout_marginLeft="29dp"
-        android:layout_marginRight="29dp"
-        android:backgroundTint="@color/Verde_Medio"/>
+        android:text="Crear la cuenta"
+        android:textSize="20sp"
+        android:textAllCaps="false"
+        >
+    </androidx.appcompat.widget.AppCompatButton>
 
     <TextView
         android:layout_width="match_parent"
