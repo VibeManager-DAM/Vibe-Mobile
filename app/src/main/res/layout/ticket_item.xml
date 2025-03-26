@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    android:id="@+id/ticket_item"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="137dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:layout_margin="22dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Fondo con imagen borrosa -->
+        <ImageView
+            android:id="@+id/img_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:alpha="0.7"
+            android:src="@drawable/evento_image"/>
+
+        <!-- Texto principal -->
+        <TextView
+            android:id="@+id/ticket_title"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:text="Lorem ipsum dolor sit amet"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:fontFamily="@font/gabarito_regular"
+            android:layout_marginStart="37dp"
+            android:layout_marginTop="28dp"/>
+
+        <!-- Hora -->
+        <TextView
+            android:id="@+id/ticket_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12 PM - 14 PM"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:fontFamily="@font/gabarito_regular"
+            android:layout_below="@id/ticket_title"
+            android:layout_marginStart="37dp"
+            android:layout_marginTop="10dp"/>
+
+        <!-- Fecha -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ticket_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18"
+                android:fontFamily="@font/lato_bold"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/ticket_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="May"
+                android:fontFamily="@font/lato_bold"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:gravity="center"/>
+        </LinearLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

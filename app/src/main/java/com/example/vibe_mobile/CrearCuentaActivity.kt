@@ -1,19 +1,17 @@
 package com.example.vibe_mobile
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class LandingActivity : AppCompatActivity() {
+class CrearCuentaActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        //setContentView(R.layout.activity_main)
-        setContentView(R.layout.landing_page)
-
-
-
+        setContentView(R.layout.crear_cuenta)
     }
+
 }

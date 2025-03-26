@@ -6,5 +6,6 @@
     <color name="Verde_Medio">#39514F</color>
     <color name="Verde_Claro">#D8E1CC</color>
     <color name="Background">#E8E7E1</color>
-
+    <color name="degraded_colorOne">#FFFFFF</color>
+    <color name="degraded_colorTwo">#E8E7E1</color>
 </resources>
