@@ -15,10 +15,11 @@
         android:id="@+id/navMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:menu="@menu/navegation_menu"
         android:layout_gravity="bottom"
-        android:background="#E8E7E1"
+        android:elevation="8dp"
+        android:background="@color/Background"
+        app:itemIconTint="@color/Verde_Oscuro"
         app:itemTextColor="@color/Verde_Oscuro"
-        />
+        app:menu="@menu/navegation_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
