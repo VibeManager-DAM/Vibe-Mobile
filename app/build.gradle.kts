@@ -37,7 +37,9 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation("androidx.fragment:fragment-ktx:1.8.6")
+    implementation(libs.androidx.fragment.ktx)
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
@@ -45,5 +47,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("com.google.android.material:material:1.12.0")
+    implementation(libs.material)
+    implementation(libs.coil)
 }

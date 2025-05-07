@@ -4,8 +4,8 @@ data class CardItem
     (
         val title: String,
         val date: String,
-        val price: String,
-        val imagenResId: Int,
+        val price: Double,
+        val imagenResId: String?,
         val capacity: Int,
         val seats: Boolean,
         val description: String,

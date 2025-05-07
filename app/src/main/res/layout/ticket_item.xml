@@ -15,7 +15,7 @@
 
         <!-- Fondo con imagen borrosa -->
         <ImageView
-            android:id="@+id/img_background"
+            android:id="@+id/ticket_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"

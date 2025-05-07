@@ -1,10 +1,18 @@
 package com.example.vibe_mobile
 
+import TicketsAdapter
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.vibe_mobile.Clases.TicketItem
+import java.time.LocalDate
+import java.time.LocalTime
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +28,8 @@ class SecondFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var recyclerViewTickets: RecyclerView
+    private lateinit var adapter: TicketsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,12 +39,53 @@ class SecondFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_second, container, false)
+        val view = inflater.inflate(R.layout.fragment_second, container, false)
+        showTickets(view)
+
+        return view
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showTickets(view: View) {
+        val tickets = listOf(
+            TicketItem(
+                id = 1,
+                title = "Concierto de Jazz",
+                date = LocalDate.of(2025, 5, 18),
+                time = LocalTime.of(20, 0),
+                numCol = 5,
+                numRow = 2,
+                imageResId = R.drawable.evento_image
+            ),
+            TicketItem(
+                id = 2,
+                title = "Festival Indie",
+                date = LocalDate.of(2025, 5, 21),
+                time = LocalTime.of(21, 0),
+                numCol = 3,
+                numRow = 4,
+                imageResId = R.drawable.evento_image
+            ),
+            TicketItem(
+                id = 3,
+                title = "Obra de Teatro Clásico",
+                date = LocalDate.of(2025, 5, 29),
+                time = LocalTime.of(19, 30),
+                numCol = 2,
+                numRow = 1,
+                imageResId = R.drawable.evento_image
+            )
+        )
+
+        recyclerViewTickets = view.findViewById(R.id.recyclerTickets)
+        recyclerViewTickets.layoutManager = LinearLayoutManager(requireContext())
+        adapter = TicketsAdapter(tickets)
+        recyclerViewTickets.adapter = adapter
     }
 
     companion object {
