@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/Background"
+    >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="595dp"
+        android:src="@drawable/evento_image"
+        android:scaleType="centerCrop"
+        />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="138dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="150dp"
+        android:background="@drawable/bg_degraded_card"
+        />
+
+    <FrameLayout
+        android:layout_width="377dp"
+        android:layout_height="374dp"
+        android:layout_gravity="center|bottom"
+        android:background="@drawable/bg_degraded"
+        >
+
+        <TextView
+            android:layout_width="271dp"
+            android:layout_height="wrap_content"
+            android:text="Quiere reservar un dia puntual o en un perdiodo de tiempo ?"
+            android:fontFamily="@font/gabarito_semibold"
+            android:textSize="24sp"
+            android:layout_margin="16dp"
+            />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="137dp"
+            android:layout_marginTop="120dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_puntual"
+                style="@style/CustomButtonClaro"
+                android:layout_width="354dp"
+                android:layout_height="50dp"
+                android:layout_gravity="top|center"
+                android:text="Puntual"
+                android:textSize="20sp"
+                android:textAllCaps="false"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_periodoTiempo"
+                style="@style/CustomButtonClaro"
+                android:layout_width="354dp"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom|center"
+                android:text="Periodo de tiempo"
+                android:textSize="20sp"
+                android:textAllCaps="false"
+                android:layout_marginBottom="10dp"
+                />
+        </FrameLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_iniciarSesion"
+            style="@style/CustomButton"
+            android:layout_width="354dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|center"
+            android:text="Reservar espacio"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            android:layout_marginBottom="29dp"
+            />
+    </FrameLayout>
+</FrameLayout>

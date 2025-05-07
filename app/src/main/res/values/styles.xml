@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="CustomButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/rounded_button</item>
+        <item name="android:background">@drawable/bg_round_btn</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:gravity">center</item>
         <item name="android:fontFamily">@font/gabarito_regular</item>
         <item name="android:elevation">0dp</item>
     </style>
     <style name="CustomButtonClaro" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/rounded_btn_claro</item>
+        <item name="android:background">@drawable/bg_round_btn_light</item>
+        <item name="android:textColor">@color/Verde_Oscuro</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/gabarito_regular</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+    <style name="CustomButtonClaroGris" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/bg_round_btn_grey</item>
         <item name="android:textColor">@color/Verde_Oscuro</item>
         <item name="android:gravity">center</item>
         <item name="android:fontFamily">@font/gabarito_regular</item>

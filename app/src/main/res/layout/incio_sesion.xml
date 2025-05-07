@@ -37,8 +37,8 @@
             android:hint="Correo"
             android:textSize="16sp"
             android:paddingStart="40dp"
-            android:layout_gravity="center | top"
-            android:background="@drawable/rounded_txt"
+            android:layout_gravity="center|top"
+            android:background="@drawable/bg_round_txt"
             />
         <EditText
             android:id="@+id/user_contrasena"
@@ -48,8 +48,8 @@
             android:textSize="16sp"
             android:paddingStart="40dp"
             android:layout_marginTop="100dp"
-            android:layout_gravity="center | top"
-            android:background="@drawable/rounded_txt"
+            android:layout_gravity="center|top"
+            android:background="@drawable/bg_round_txt"
             />
         <ImageView
             android:layout_width="20dp"
@@ -82,7 +82,7 @@
             android:layout_width="354dp"
             android:layout_height="69dp"
             android:layout_gravity="center"
-            android:text="Iniciar sesión"
+            android:text="@string/iniciar_sesion"
             android:textSize="20sp"
             android:textAllCaps="false"
             >

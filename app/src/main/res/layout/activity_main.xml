@@ -25,24 +25,37 @@
         android:text="Etiam molestie turpis tortor, vel porttitor est gravida mollis."
         android:textSize="18sp"/>
 
-    <Button
-        android:id="@+id/my_button"
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_crearCuenta"
+        style="@style/CustomButton"
+        android:layout_width="354dp"
         android:layout_height="69dp"
-        android:textSize="20sp"
-        android:text="@string/button_text"
         android:layout_gravity="center"
-        android:layout_marginLeft="29dp"
-        android:layout_marginRight="29dp"
-        android:backgroundTint="@color/Verde_Medio"/>
+        android:text="Crear la cuenta"
+        android:textSize="20sp"
+        android:textAllCaps="false"
+        >
+    </androidx.appcompat.widget.AppCompatButton>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="14sp"
-        android:layout_marginTop="470dp"
-        android:layout_gravity=""
-        android:text="Etiam molestie turpis tortor? Iniciar sesión"/>
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:layout_marginTop="470dp"
+            android:layout_marginStart="70dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="Etiam molestie turpis tortor?"/>
+        <TextView
+            android:id="@+id/btn_iniciarSesion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:layout_marginTop="470dp"
+            android:layout_marginEnd="75dp"
+            android:layout_gravity="end"
+            android:fontFamily="@font/lato_regular"
+            android:text="Iniciar sesión"
+            />
 </FrameLayout>

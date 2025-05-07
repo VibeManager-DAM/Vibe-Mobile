@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <color name="lightGrey">#F0F0F0</color>
     <color name="Verde_Oscuro">#03201D</color>
     <color name="Verde_Medio">#39514F</color>
     <color name="Verde_Claro">#D8E1CC</color>
     <color name="Background">#E8E7E1</color>
-
+    <color name="degraded_colorOne">#FFFFFF</color>
+    <color name="degraded_colorTwo">#E8E7E1</color>
 </resources>

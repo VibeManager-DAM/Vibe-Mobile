@@ -1,0 +1,80 @@
+import android.content.Intent
+import android.os.Build
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.example.vibe_mobile.Activities.ComprarEntradaUsuario
+import com.example.vibe_mobile.Clases.CardItem
+import com.example.vibe_mobile.R
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Locale
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
+class CardAdapter(
+        private var itemList: List<CardItem> // ← var para que se pueda actualizar
+) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
+
+    class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val fecha: TextView = itemView.findViewById(R.id.card_date)
+        val titulo: TextView = itemView.findViewById(R.id.card_title)
+        val precio: TextView = itemView.findViewById(R.id.card_price)
+        val imagen: ImageView = itemView.findViewById(R.id.card_image)
+        val boton: Button = itemView.findViewById(R.id.card_btn)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.card_item, parent, false)
+        return CardViewHolder(view)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
+        val item = itemList[position]
+
+        val fechaFormateada = formatearFecha(item.date)
+
+        holder.fecha.text = fechaFormateada
+        holder.titulo.text = item.title
+        holder.precio.text = item.price.toString() + "€"
+        holder.imagen.load(item.imagenResId)
+
+        holder.boton.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, ComprarEntradaUsuario::class.java).apply {
+                putExtra("title", item.title)
+                putExtra("date", item.date)
+                putExtra("price", item.price)
+                putExtra("description", item.description)
+                putExtra("capacity", item.capacity)
+            }
+            context.startActivity(intent)
+        }
+    }
+
+    override fun getItemCount(): Int = itemList.size
+
+    fun updateData(newList: List<CardItem>) {
+        itemList = newList
+        notifyDataSetChanged()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun formatearFecha(fechaOriginal: String): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+        val fecha = LocalDateTime.parse(fechaOriginal, formatter)
+
+        val dia = fecha.dayOfMonth.toString()
+        val mes = fecha.month.getDisplayName(TextStyle.SHORT, Locale("es")).uppercase()
+        return "$dia\n$mes"
+    }
+
+}
