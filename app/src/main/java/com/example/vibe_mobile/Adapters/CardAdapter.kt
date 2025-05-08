@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.vibe_mobile.Activities.ComprarEntradaUsuario
 import com.example.vibe_mobile.Clases.CardItem
+import com.example.vibe_mobile.Clases.Event
 import com.example.vibe_mobile.R
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -19,7 +20,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class CardAdapter(
-        private var itemList: List<CardItem> // ← var para que se pueda actualizar
+        private var itemList: List<Event>
 ) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
 
     class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -45,7 +46,7 @@ class CardAdapter(
         holder.fecha.text = fechaFormateada
         holder.titulo.text = item.title
         holder.precio.text = item.price.toString() + "€"
-        holder.imagen.load(item.imagenResId)
+        holder.imagen.load(item.image)
 
         holder.boton.setOnClickListener {
             val context = holder.itemView.context
@@ -55,6 +56,8 @@ class CardAdapter(
                 putExtra("price", item.price)
                 putExtra("description", item.description)
                 putExtra("capacity", item.capacity)
+                putExtra("image", item.image)
+                putExtra("time", item.time)
             }
             context.startActivity(intent)
         }
@@ -62,7 +65,7 @@ class CardAdapter(
 
     override fun getItemCount(): Int = itemList.size
 
-    fun updateData(newList: List<CardItem>) {
+    fun updateData(newList: List<Event>) {
         itemList = newList
         notifyDataSetChanged()
     }
