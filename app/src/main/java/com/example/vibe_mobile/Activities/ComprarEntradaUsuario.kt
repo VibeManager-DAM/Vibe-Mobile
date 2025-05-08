@@ -37,13 +37,13 @@ class ComprarEntradaUsuario: AppCompatActivity() {
 
         val btnComprarEntrada = findViewById<AppCompatButton>(R.id.cardBuy_btn)
 
+        // Agregar una animacion de gracias por comprar con nosotros o algo asi.
         // Listener
         btnComprarEntrada.setOnClickListener {
-            Toast.makeText(this,
-                "Puedes ver tus entradas en tickets!",
-                Toast.LENGTH_SHORT
-            ).show()
             val intent = Intent(this, FragmentActivity::class.java)
+            intent.putExtra("ticketFragment", "tickets")
+            intent.putExtra("ticketEventTitle", title)
+            intent.putExtra("ticketEventImage", image)
             startActivity(intent)
             finish()
         }

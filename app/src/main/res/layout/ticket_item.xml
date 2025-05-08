@@ -29,6 +29,10 @@
             android:layout_height="wrap_content"
             android:text="Lorem ipsum dolor sit amet"
             android:textColor="@android:color/white"
+            android:shadowColor="#80000000"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:shadowRadius="6"
             android:textSize="24sp"
             android:fontFamily="@font/gabarito_regular"
             android:layout_marginStart="37dp"
@@ -41,6 +45,10 @@
             android:layout_height="wrap_content"
             android:text="12 PM - 14 PM"
             android:textColor="@android:color/white"
+            android:shadowColor="#80000000"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:shadowRadius="6"
             android:textSize="16sp"
             android:fontFamily="@font/gabarito_regular"
             android:layout_below="@id/ticket_title"
@@ -63,18 +71,12 @@
                 android:text="18"
                 android:fontFamily="@font/lato_bold"
                 android:textColor="@android:color/white"
+                android:shadowColor="#80000000"
+                android:shadowDx="3"
+                android:shadowDy="3"
+                android:shadowRadius="6"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:gravity="center"/>
-
-            <TextView
-                android:id="@+id/ticket_month"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="May"
-                android:fontFamily="@font/lato_bold"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
                 android:gravity="center"/>
         </LinearLayout>
     </RelativeLayout>
