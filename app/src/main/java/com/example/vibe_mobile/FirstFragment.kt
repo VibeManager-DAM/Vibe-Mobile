@@ -13,6 +13,7 @@ import com.example.vibe_mobile.Clases.CardItem
 import androidx.fragment.app.viewModels
 import com.example.vibe_mobile.ViewModels.EventViewModel
 import coil.load
+import com.example.vibe_mobile.Clases.Event
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -65,14 +66,19 @@ class FirstFragment : Fragment() {
     private fun observeEvents() {
         eventViewModel.events.observe(viewLifecycleOwner) { events ->
                 val cardItems = events.map { event ->
-                CardItem(
+                Event(
+                    id = event.id,
                     title = event.title,
+                    description = event.description ?: "Sin descripción",
                     date = event.date,
-                    price = event.price,
-                    imagenResId = event.image,
+                    time = event.time,
+                    image = event.image,
                     capacity = event.capacity,
                     seats = event.seats,
-                    description = event.description ?: "Sin descripción"
+                    price = event.price,
+                    num_rows = event.num_rows,
+                    num_columns = event.num_columns,
+                    id_organizer = event.id_organizer
                 )
             }
             adapter.updateData(cardItems)
@@ -82,7 +88,6 @@ class FirstFragment : Fragment() {
             Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_LONG).show()
         }
     }
-
 
     companion object {
         /**
