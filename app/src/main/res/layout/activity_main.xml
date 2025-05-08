@@ -42,18 +42,18 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="14sp"
-            android:layout_marginTop="470dp"
-            android:layout_marginStart="70dp"
+            android:layout_marginTop="480dp"
+            android:layout_marginStart="90dp"
             android:fontFamily="@font/lato_bold"
-            android:text="Etiam molestie turpis tortor?"/>
+            android:text="Ya tienes una cuenta?"/>
         <TextView
             android:id="@+id/btn_iniciarSesion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="14sp"
-            android:layout_marginTop="470dp"
-            android:layout_marginEnd="75dp"
+            android:layout_marginTop="480dp"
+            android:layout_marginEnd="90dp"
             android:layout_gravity="end"
             android:fontFamily="@font/lato_regular"
             android:text="Iniciar sesión"

@@ -68,6 +68,17 @@
             android:alpha="0.5"
             android:scaleType="centerCrop"/>
 
+        <CheckBox
+            android:id="@+id/checkbox_remember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recuérdame"
+            android:textSize="18sp"
+            android:fontFamily="@font/lato_bold"
+            android:layout_marginTop="180dp"
+            android:layout_marginStart="20dp"
+            android:layout_gravity="start|top"/>
+
     </FrameLayout>
     <FrameLayout
         android:layout_width="match_parent"
@@ -93,6 +104,6 @@
             android:gravity="center"
             android:textSize="14sp"
             android:layout_marginTop="100dp"
-            android:text="Etiam molestie turpis tortor? Crear una cuenta"/>
+            android:text="No tienes cuenta? Crear una cuenta"/>
     </FrameLayout>
 </FrameLayout>

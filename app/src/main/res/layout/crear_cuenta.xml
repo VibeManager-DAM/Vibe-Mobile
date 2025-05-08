@@ -5,8 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Verde_Oscuro"
-    >
+    android:background="@color/Verde_Oscuro">
 
     <ImageView
         android:id="@+id/image_view"
@@ -15,6 +14,7 @@
         android:contentDescription="@string/logoimage"
         android:src="@drawable/logo_white"
         android:scaleType="centerCrop"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,52 +24,73 @@
         android:text="Crear una cuenta"
         android:textSize="48sp"
         android:textColor="@color/Background"
-        android:fontFamily="@font/gabarito_medium"
-        />
+        android:fontFamily="@font/gabarito_medium"/>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="450dp"
-        >
+        android:layout_marginTop="450dp">
+
+        <!-- Nombre completo -->
         <EditText
-            android:id="@+id/user_correo"
+            android:id="@+id/user_name"
             android:layout_width="373dp"
             android:layout_height="69dp"
-            android:hint="Correo"
+            android:hint="Nombre completo"
             android:textSize="16sp"
             android:paddingStart="40dp"
-            android:layout_gravity="center | top"
-            android:background="@drawable/bg_round_txt"
-            />
-        <EditText
-            android:id="@+id/user_contrasena"
-            android:layout_width="373dp"
-            android:layout_height="69dp"
-            android:hint="Contraseña"
-            android:textSize="16sp"
-            android:paddingStart="40dp"
-            android:layout_marginTop="100dp"
-            android:layout_gravity="center | top"
-            android:background="@drawable/bg_round_txt"
-            />
+            android:layout_gravity="center|top"
+            android:background="@drawable/bg_round_txt"/>
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginTop="24dp"
             android:layout_marginStart="35dp"
-            android:src="@drawable/icon_correo"
+            android:src="@drawable/icon_usuario"
             android:alpha="0.5"
             android:scaleType="centerCrop"/>
+
+        <!-- Correo -->
+        <EditText
+            android:id="@+id/user_mail"
+            android:layout_width="373dp"
+            android:layout_height="69dp"
+            android:hint="Correo"
+            android:textSize="16sp"
+            android:paddingStart="40dp"
+            android:layout_marginTop="80dp"
+            android:layout_gravity="center|top"
+            android:background="@drawable/bg_round_txt"/>
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginTop="125dp"
+            android:layout_marginTop="105dp"
+            android:layout_marginStart="35dp"
+            android:src="@drawable/icon_correo"
+            android:alpha="0.5"
+            android:scaleType="centerCrop"/>
+
+        <!-- Contraseña -->
+        <EditText
+            android:id="@+id/user_password"
+            android:layout_width="373dp"
+            android:layout_height="69dp"
+            android:hint="Contraseña"
+            android:textSize="16sp"
+            android:paddingStart="40dp"
+            android:layout_marginTop="160dp"
+            android:layout_gravity="center|top"
+            android:background="@drawable/bg_round_txt"/>
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="185dp"
             android:layout_marginStart="35dp"
             android:src="@drawable/icon_llave"
             android:alpha="0.5"
             android:scaleType="centerCrop"/>
-
     </FrameLayout>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,16 +99,15 @@
         android:gravity="center">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_iniciarSesion"
+            android:id="@+id/CreateAccount"
             style="@style/CustomButtonClaro"
             android:layout_width="354dp"
             android:layout_height="69dp"
             android:layout_gravity="center"
-            android:text="Crear la cuenta"
+            android:text="Crear cuenta"
             android:textSize="20sp"
-            android:textAllCaps="false"
-            >
-        </androidx.appcompat.widget.AppCompatButton>
+            android:textAllCaps="false"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,6 +115,6 @@
             android:textSize="14sp"
             android:layout_marginTop="100dp"
             android:textColor="@color/Background"
-            android:text="Etiam molestie turpis tortor? Iniciar sesión"/>
+            android:text="¿Ya tienes una cuenta? Iniciar sesión"/>
     </FrameLayout>
 </FrameLayout>
