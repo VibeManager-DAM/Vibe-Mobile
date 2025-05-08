@@ -1,10 +1,22 @@
 package com.example.vibe_mobile
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.vibe_mobile.Activities.InsideChatActivity
+import com.example.vibe_mobile.Adapters.ChatPreviewAdapter
+import com.example.vibe_mobile.Tools.Tools
+import com.example.vibe_mobile.API.Users.UserRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,6 +48,45 @@ class ThirdFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_third, container, false)
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        showChats()
+    }
+
+    private fun showChats() {
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerChats) ?: return
+        val user = Tools.getUser(requireContext()) ?: return
+        val userId = user.id ?: return
+
+        lifecycleScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    UserRepository().getChatsByUserId(userId)
+                }
+
+                if (response.isSuccessful) {
+                    val chatList = response.body() ?: emptyList()
+
+                    val adapter = ChatPreviewAdapter(chatList) { chat ->
+                        val intent = Intent(requireContext(), InsideChatActivity::class.java)
+                        intent.putExtra("chat_id", chat.chatId)
+                        intent.putExtra("event_title", chat.eventTitle)
+                        intent.putExtra("event_image", chat.image)
+                        startActivity(intent)
+                    }
+
+                    recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                    recyclerView.adapter = adapter
+                } else {
+                    Toast.makeText(requireContext(), "Error cargando chats", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
     companion object {
         /**

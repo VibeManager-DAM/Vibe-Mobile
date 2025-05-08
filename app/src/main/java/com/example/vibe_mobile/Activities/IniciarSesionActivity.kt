@@ -10,7 +10,8 @@ import androidx.appcompat.widget.AppCompatButton
 import com.example.vibe_mobile.FragmentActivity
 import com.example.vibe_mobile.R
 import com.example.vibe_mobile.Tools.CryptoUtils
-import com.example.vibe_mobile.repository.UserRepository
+import com.example.vibe_mobile.Tools.Tools
+import com.example.vibe_mobile.API.Users.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,7 +46,10 @@ class IniciarSesionActivity : AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         if (response.isSuccessful && response.body() != null) {
-                            val user = response.body()
+                            val user = response.body()!!
+
+                            Tools.saveUser(this@IniciarSesionActivity, user)
+
                             if (checkRemember.isChecked) {
                                 val file = File(filesDir, "login.txt")
                                 val encryptedEmail = CryptoUtils.encrypt(email)
@@ -53,7 +57,7 @@ class IniciarSesionActivity : AppCompatActivity() {
                                 file.writeText("$encryptedEmail\n$encryptedPassword")
                             }
 
-                            Toast.makeText(this@IniciarSesionActivity, "Bienvenido, ${user?.fullname}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@IniciarSesionActivity, "Bienvenido, ${user.fullname}", Toast.LENGTH_SHORT).show()
                             val intent = Intent(this@IniciarSesionActivity, FragmentActivity::class.java)
                             startActivity(intent)
                             finish()

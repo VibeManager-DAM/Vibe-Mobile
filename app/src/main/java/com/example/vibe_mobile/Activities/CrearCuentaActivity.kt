@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.example.vibe_mobile.Clases.User
 import com.example.vibe_mobile.R
-import com.example.vibe_mobile.repository.UserRepository
+import com.example.vibe_mobile.API.Users.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
