@@ -22,7 +22,7 @@
         android:layout_marginTop="260dp"
         android:paddingLeft="73dp"
         android:paddingRight="73dp"
-        android:text="Etiam molestie turpis tortor, vel porttitor est gravida mollis."
+        android:text="Crea experiencias \n Organiza momentos \n Reserva tu lugar"
         android:textSize="18sp"/>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -31,7 +31,7 @@
         android:layout_width="354dp"
         android:layout_height="69dp"
         android:layout_gravity="center"
-        android:text="Crear la cuenta"
+        android:text="Crear cuenta"
         android:textSize="20sp"
         android:textAllCaps="false"
         >

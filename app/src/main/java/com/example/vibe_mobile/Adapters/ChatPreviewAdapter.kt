@@ -20,7 +20,7 @@ class ChatPreviewAdapter(
         val image: ImageView = view.findViewById(R.id.imgChat)
 
         fun bind(chat: ChatPreview) {
-            title.text = chat.eventTitle
+            title.text = chat.EventTitle
 
             image.load(chat.image) {
                 crossfade(true)

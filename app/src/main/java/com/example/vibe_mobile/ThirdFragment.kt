@@ -70,8 +70,8 @@ class ThirdFragment : Fragment() {
 
                     val adapter = ChatPreviewAdapter(chatList) { chat ->
                         val intent = Intent(requireContext(), InsideChatActivity::class.java)
-                        intent.putExtra("chat_id", chat.chatId)
-                        intent.putExtra("event_title", chat.eventTitle)
+                        intent.putExtra("chat_id", chat.ChatId)
+                        intent.putExtra("event_title", chat.EventTitle)
                         intent.putExtra("event_image", chat.image)
                         startActivity(intent)
                     }
