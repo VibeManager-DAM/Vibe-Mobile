@@ -5,6 +5,7 @@ import com.example.vibe_mobile.API.Users.UserService
 import com.example.vibe_mobile.Clases.RegisterResponse
 import com.example.vibe_mobile.Clases.Ticket
 import com.example.vibe_mobile.Clases.User
+import com.example.vibe_mobile.Clases.UserTicketsResponse
 import retrofit2.Response
 
 class UserRepository {
@@ -29,7 +30,7 @@ class UserRepository {
         return userService.getUserById(id)
     }
 
-    suspend fun getUserTickets(id: Int): Response<List<Ticket>>{
+    suspend fun getUserTickets(id: Int): Response<UserTicketsResponse>{
         return userService.getUserTickets(id)
     }
 

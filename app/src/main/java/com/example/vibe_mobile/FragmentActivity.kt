@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
@@ -53,20 +54,44 @@ class FragmentActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.navegation)
 
         navegation = findViewById(R.id.navMenu)
         navegation.setOnNavigationItemSelectedListener(mOnNavMenu)
 
+        val ticketFragment = intent.getStringExtra("ticketFragment")
+        val ticketTitle = intent.getStringExtra("ticketEventTitle")
+        val ticketImage = intent.getStringExtra("ticketEventImage")
+
         // Set default fragment
         if (savedInstanceState == null) {
-            navegation.selectedItemId = R.id.itemFragmentHome
+            when (ticketFragment) {
+                "tickets" -> {
+                    val bundle = Bundle().apply {
+                        putString("ticketEventTitle", ticketTitle)
+                        putString("ticketEventImage", ticketImage)
+                    }
+                    val secondFragment = SecondFragment().apply {
+                        arguments = bundle
+                    }
+                    supportFragmentManager.commit {
+                        replace(R.id.frameContainer, secondFragment)
+                        setReorderingAllowed(true)
+                        addToBackStack("replacement")
+                    }
+                    navegation.selectedItemId = R.id.itemFragmentTickets
+                }
+                "chat" -> navegation.selectedItemId = R.id.itemFragmentChat
+                "config" -> navegation.selectedItemId = R.id.itemFragmentConfg
+                else -> navegation.selectedItemId = R.id.itemFragmentHome
+            }
         }
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.navbarPage)) { v, insets ->
+        val bottomNav = findViewById<BottomNavigationView>(R.id.navMenu)
+        ViewCompat.setOnApplyWindowInsetsListener(bottomNav) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(0,0,0, systemBars.bottom)
             insets
         }
     }

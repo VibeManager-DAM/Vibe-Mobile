@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vibe_mobile.Clases.CardItem
 import androidx.fragment.app.viewModels
 import com.example.vibe_mobile.ViewModels.EventViewModel
 import coil.load

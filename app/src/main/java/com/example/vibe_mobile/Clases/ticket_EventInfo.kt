@@ -1,10 +1,10 @@
 package com.example.vibe_mobile.Clases
 
-data class Ticket(
+data class EventInfo(
     val id: Int,
+    val title: String,
     val date: String,
     val time: String,
-    val num_row: Int,
-    val num_col: Int,
-    val eventInfo: EventInfo
+    val capacity: Int,
+    val image: String
 )

@@ -4,20 +4,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/Background"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <FrameLayout
         android:id="@+id/frameContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:elevation="8dp"
+        android:layout_alignParentBottom="true"
         android:background="@color/Background"
+
         app:itemIconTint="@color/Verde_Oscuro"
         app:itemTextColor="@color/Verde_Oscuro"
         app:menu="@menu/navegation_menu" />
