@@ -1,16 +1,25 @@
 package com.example.vibe_mobile
 
 import TicketsAdapter
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vibe_mobile.API.RetrofitClient
+import com.example.vibe_mobile.API.Users.UserService
+import com.example.vibe_mobile.Clases.Ticket
 import com.example.vibe_mobile.Clases.TicketItem
+import com.example.vibe_mobile.ViewModel.TicketViewModel
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -28,9 +37,10 @@ class SecondFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
     private lateinit var recyclerViewTickets: RecyclerView
     private lateinit var adapter: TicketsAdapter
-
+    private val ticketViewModel: TicketViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -52,40 +62,45 @@ class SecondFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showTickets(view: View) {
-        val tickets = listOf(
-            TicketItem(
-                id = 1,
-                title = "Concierto de Jazz",
-                date = LocalDate.of(2025, 5, 18),
-                time = LocalTime.of(20, 0),
-                numCol = 5,
-                numRow = 2,
-                imageResId = R.drawable.evento_image
-            ),
-            TicketItem(
-                id = 2,
-                title = "Festival Indie",
-                date = LocalDate.of(2025, 5, 21),
-                time = LocalTime.of(21, 0),
-                numCol = 3,
-                numRow = 4,
-                imageResId = R.drawable.evento_image
-            ),
-            TicketItem(
-                id = 3,
-                title = "Obra de Teatro Clásico",
-                date = LocalDate.of(2025, 5, 29),
-                time = LocalTime.of(19, 30),
-                numCol = 2,
-                numRow = 1,
-                imageResId = R.drawable.evento_image
-            )
-        )
-
-        recyclerViewTickets = view.findViewById(R.id.recyclerTickets)
+        recyclerViewTickets = view.findViewById(R.id.user_tickets)
         recyclerViewTickets.layoutManager = LinearLayoutManager(requireContext())
-        adapter = TicketsAdapter(tickets)
-        recyclerViewTickets.adapter = adapter
+        getTicketsUser()
+    }
+
+    @SuppressLint("SuspiciousIndentation")
+    private fun getTicketsUser() {
+        val apiService = RetrofitClient.createService(UserService::class.java)
+
+        val userId = 3 /* Cambiar cuando tenga el log in */
+
+            lifecycleScope.launch {
+                try {
+                    val response = apiService.getUserTickets(userId)
+
+                    if (response.isSuccessful && response.body() != null) {
+                        val userData = response.body()!!
+                        val tickets = userData.tickets
+
+                        val ticketItems = tickets.map { ticket ->
+                            TicketItem(
+                                id = ticket.id,
+                                date = ticket.date,
+                                time = ticket.time,
+                                num_col = ticket.num_col,
+                                num_row = ticket.num_row,
+                                image = ticket.eventInfo.image,
+                                title = ticket.eventInfo.title
+                            )
+                        }
+                        adapter = TicketsAdapter(ticketItems)
+                        recyclerViewTickets.adapter = adapter
+                    } else {
+                        Toast.makeText(requireContext(), "Error al cargar tickets", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), "Error de conexión: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 
     companion object {

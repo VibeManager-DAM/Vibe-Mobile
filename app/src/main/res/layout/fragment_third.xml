@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ThirdFragment"
-    android:background="@color/Background">
+    android:background="@color/Background"
+    >
 
     <TextView
         android:layout_width="wrap_content"

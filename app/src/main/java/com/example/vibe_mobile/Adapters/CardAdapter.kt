@@ -1,3 +1,4 @@
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.view.LayoutInflater
@@ -9,11 +10,10 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.example.vibe_mobile.Activities.ComprarEntradaUsuario
-import com.example.vibe_mobile.Clases.CardItem
 import com.example.vibe_mobile.Clases.Event
 import com.example.vibe_mobile.R
-import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 import java.time.LocalDateTime
@@ -46,7 +46,9 @@ class CardAdapter(
         holder.fecha.text = fechaFormateada
         holder.titulo.text = item.title
         holder.precio.text = item.price.toString() + "€"
-        holder.imagen.load(item.image)
+        holder.imagen.load(item.image) {
+            transformations(RoundedCornersTransformation(10f))
+        }
 
         holder.boton.setOnClickListener {
             val context = holder.itemView.context
@@ -70,6 +72,7 @@ class CardAdapter(
         notifyDataSetChanged()
     }
 
+    @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.O)
     fun formatearFecha(fechaOriginal: String): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")

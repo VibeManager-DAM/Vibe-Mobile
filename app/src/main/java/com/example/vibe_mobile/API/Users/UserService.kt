@@ -3,6 +3,7 @@ import com.example.vibe_mobile.Clases.ChatPreview
 import com.example.vibe_mobile.Clases.RegisterResponse
 import com.example.vibe_mobile.Clases.Ticket
 import com.example.vibe_mobile.Clases.User
+import com.example.vibe_mobile.Clases.UserTicketsResponse
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -27,4 +28,7 @@ interface UserService {
 
     @GET("api/users/{id}/chats")
     suspend fun getChatsByUserId(@Path("id") userId: Int): Response<List<ChatPreview>>
+
+    suspend fun getUserTickets(@Path("id") id: Int): Response<UserTicketsResponse>
+
 }
