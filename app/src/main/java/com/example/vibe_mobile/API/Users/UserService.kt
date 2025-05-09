@@ -23,12 +23,10 @@ interface UserService {
     @GET("api/users/{id}")
     suspend fun getUserById(@Path("id") id: Int): Response<User>
 
-    @GET("api/users/{id}/tickets")
-    suspend fun getUserTickets(@Path("id") id: Int): Response<List<Ticket>>
-
     @GET("api/users/{id}/chats")
     suspend fun getChatsByUserId(@Path("id") userId: Int): Response<List<ChatPreview>>
 
+    @GET("api/users/{id}/tickets")
     suspend fun getUserTickets(@Path("id") id: Int): Response<UserTicketsResponse>
 
 }

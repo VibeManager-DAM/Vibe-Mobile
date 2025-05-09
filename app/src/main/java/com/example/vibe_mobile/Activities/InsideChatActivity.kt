@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vibe_mobile.Adapters.MessageAdapter
 import com.example.vibe_mobile.Clases.Message
 import com.example.vibe_mobile.R
+import com.example.vibe_mobile.Tools.Tools
 
 class InsideChatActivity : AppCompatActivity() {
 
@@ -29,6 +30,8 @@ class InsideChatActivity : AppCompatActivity() {
     private lateinit var messageInput: EditText
     private lateinit var adapter: MessageAdapter
     private lateinit var eventNameChat: TextView
+    private var currentUserId = Tools.getUser(this)?.id ?: DEFAULT_USER_ID
+
     private val messages = mutableListOf<Message>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,13 +39,22 @@ class InsideChatActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_inside_chat)
 
+        val currentUserId = Tools.getUser(this)?.id ?: DEFAULT_USER_ID
+        val chatId = intent.getIntExtra("chat_id", DEFAULT_CHAT_ID)
+        val eventTitle = intent.getStringExtra("event_title") ?: DEFAULT_RECEIVER_NAME
+        val eventImage = intent.getStringExtra("event_image") ?: ""
+
+
+        eventNameChat = findViewById(R.id.nameChat)
+        eventNameChat.text = eventTitle
+
         initViews()
         setUpRecycler()
         setupKeyboardListener()
     }
 
     private fun setUpRecycler() {
-        //adapter = MessageAdapter(messages,this)
+        adapter = MessageAdapter(messages, currentUserId)
         chatRecyclerView.layoutManager = LinearLayoutManager(this)
         chatRecyclerView.adapter = adapter
     }
