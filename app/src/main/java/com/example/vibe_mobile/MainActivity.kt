@@ -11,7 +11,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.vibe_mobile.Activities.CrearCuentaActivity
 import com.example.vibe_mobile.Activities.IniciarSesionActivity
 import com.example.vibe_mobile.Tools.CryptoUtils
-import com.example.vibe_mobile.repository.UserRepository
+import com.example.vibe_mobile.Tools.Tools
+import com.example.vibe_mobile.API.Users.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val lines = file.readLines()
-        if (lines.size < 2){
+        if (lines.size < 2) {
             return
         }
 
@@ -67,6 +68,10 @@ class MainActivity : AppCompatActivity() {
                 val response = userRepository.login(email, password)
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful && response.body() != null) {
+                        val user = response.body()!!
+
+                        Tools.saveUser(this@MainActivity, user)
+
                         val intent = Intent(this@MainActivity, FragmentActivity::class.java)
                         startActivity(intent)
                         finish()

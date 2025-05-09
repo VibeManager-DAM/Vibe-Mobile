@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ThirdFragment"
     android:background="@color/Background"
     >
@@ -11,10 +12,47 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="25sp"
-        android:text="Fragment 3"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="35dp"
+        android:text="Chats"
+        android:fontFamily="@font/gabarito_medium"
+        android:textSize="48sp"
         android:textColor="@color/Verde_Oscuro"
-        android:fontFamily="@font/gabarito_regular"/>
+        />
 
-</FrameLayout>
+    <FrameLayout
+        android:layout_width="368dp"
+        android:layout_height="71dp"
+        android:background="@drawable/bg_round_btn"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="22dp"
+        android:backgroundTint="@color/Verde_Oscuro"
+        android:padding="4dp">
+
+        <EditText
+            android:id="@+id/buscarEvento"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Buscar chat..."
+            android:textSize="13sp"
+            android:paddingStart="50dp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_round_txt"
+            />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="25dp"
+            android:src="@drawable/icon_busqueda"
+            android:alpha="0.5"
+            android:scaleType="centerCrop"/>
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerChats"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="10dp"/>
+
+</LinearLayout>

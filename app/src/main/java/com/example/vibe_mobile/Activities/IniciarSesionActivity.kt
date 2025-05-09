@@ -10,7 +10,8 @@ import androidx.appcompat.widget.AppCompatButton
 import com.example.vibe_mobile.FragmentActivity
 import com.example.vibe_mobile.R
 import com.example.vibe_mobile.Tools.CryptoUtils
-import com.example.vibe_mobile.repository.UserRepository
+import com.example.vibe_mobile.Tools.Tools
+import com.example.vibe_mobile.API.Users.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,18 +46,24 @@ class IniciarSesionActivity : AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         if (response.isSuccessful && response.body() != null) {
-                            val user = response.body()
-                            if (checkRemember.isChecked) {
-                                val file = File(filesDir, "login.txt")
-                                val encryptedEmail = CryptoUtils.encrypt(email)
-                                val encryptedPassword = CryptoUtils.encrypt(password)
-                                file.writeText("$encryptedEmail\n$encryptedPassword")
-                            }
+                            val user = response.body()!!
+                            if (user.id_rol != 3){
+                                Tools.saveUser(this@IniciarSesionActivity, user)
 
-                            Toast.makeText(this@IniciarSesionActivity, "Bienvenido, ${user?.fullname}", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this@IniciarSesionActivity, FragmentActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                                if (checkRemember.isChecked) {
+                                    val file = File(filesDir, "login.txt")
+                                    val encryptedEmail = CryptoUtils.encrypt(email)
+                                    val encryptedPassword = CryptoUtils.encrypt(password)
+                                    file.writeText("$encryptedEmail\n$encryptedPassword")
+                                }
+
+                                Toast.makeText(this@IniciarSesionActivity, "Bienvenido, ${user.fullname}", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this@IniciarSesionActivity, FragmentActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            } else{
+                                Toast.makeText(this@IniciarSesionActivity, "No puedes acceder como administrador", Toast.LENGTH_SHORT).show()
+                            }
                         } else {
                             Toast.makeText(this@IniciarSesionActivity, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
                         }
