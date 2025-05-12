@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vibe_mobile.Adapters.MessageAdapter
 import com.example.vibe_mobile.Clases.Message
 import com.example.vibe_mobile.R
+import com.example.vibe_mobile.Tools.CryptoUtils
 import com.example.vibe_mobile.Tools.Tools
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -140,10 +141,12 @@ class InsideChatActivity : AppCompatActivity() {
     private fun processIncomingMessage(messageStr: String) {
         try {
             val json = JSONObject(messageStr)
+            val encryptedContent = json.getString("content")
+            val decryptedContent = CryptoUtils.decrypt(encryptedContent)
 
             val newMessage = Message(
                 id = json.optInt("message_id", messages.size + 1),
-                context = json.getString("content"),
+                context = decryptedContent,
                 send_at = json.optString("send_at", getCurrentTimestamp()),
                 sender_id = json.getInt("from"),
                 id_chat = chatId
@@ -162,23 +165,26 @@ class InsideChatActivity : AppCompatActivity() {
 
 
     private fun sendMessage(messageText: String) {
+        val encryptedText = CryptoUtils.encrypt(messageText)
+
         val messageJson = JSONObject().apply {
             put("sender_id", currentUserId)
             put("chat_id", chatId)
-            put("content", messageText)
+            put("content", encryptedText)
         }
 
         thread {
             try {
                 outputStream.println(messageJson.toString())
                 runOnUiThread {
-                    messageInput.text.clear() // Limpiar input solo
+                    messageInput.text.clear()
                 }
             } catch (e: Exception) {
                 log(TAG_SOCKET, "Error enviando mensaje: ${e.message}")
             }
         }
     }
+
 
 
 
