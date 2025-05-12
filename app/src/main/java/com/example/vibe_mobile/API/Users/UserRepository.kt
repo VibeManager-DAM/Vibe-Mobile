@@ -2,6 +2,7 @@ package com.example.vibe_mobile.API.Users
 
 import com.example.vibe_mobile.API.RetrofitClient
 import com.example.vibe_mobile.Clases.ChatPreview
+import com.example.vibe_mobile.Clases.ModifyUserResponse
 import com.example.vibe_mobile.Clases.RegisterResponse
 import com.example.vibe_mobile.Clases.Ticket
 import com.example.vibe_mobile.Clases.User
@@ -30,7 +31,7 @@ class UserRepository {
         return userService.getUserById(id)
     }
 
-    suspend fun getUserTickets(id: Int): Response<UserTicketsResponse>{
+    suspend fun getUserTickets(id: Int?): Response<UserTicketsResponse>{
         return userService.getUserTickets(id)
     }
 

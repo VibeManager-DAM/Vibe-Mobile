@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/profilePage"
+<LinearLayout android:id="@+id/profilePage"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
@@ -8,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/Background"
     tools:context=".FourthFragment"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -54,16 +53,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         >
+
         <EditText
             android:id="@+id/user_nombre"
             android:layout_width="373dp"
             android:layout_height="69dp"
-            android:hint="Nombre"
-            android:textSize="16sp"
-            android:paddingStart="40dp"
             android:layout_gravity="center|top"
             android:background="@drawable/bg_round_txt"
-            />
+            android:hint="Nombre"
+            android:paddingStart="40dp"
+            android:textSize="16sp" />
+
         <EditText
             android:id="@+id/user_correo"
             android:layout_width="373dp"
@@ -85,6 +85,7 @@
             android:layout_marginTop="200dp"
             android:layout_gravity="center|top"
             android:background="@drawable/bg_round_txt"
+            android:inputType="textPassword"
             />
         <ImageView
             android:layout_width="20dp"
@@ -118,18 +119,15 @@
         android:layout_gravity="center">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_iniciarSesion"
+            android:id="@+id/btn_saveChanges"
             style="@style/CustomButton"
             android:layout_width="354dp"
             android:layout_height="50dp"
             android:layout_gravity="center|bottom"
             android:layout_marginBottom="140dp"
-            android:text="Guardar"
+            android:text="Guardar cambios"
             android:textSize="20sp"
             android:textAllCaps="false"
-
             />
     </FrameLayout>
-
-
 </LinearLayout>

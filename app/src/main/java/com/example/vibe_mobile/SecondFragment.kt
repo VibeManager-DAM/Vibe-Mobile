@@ -18,6 +18,7 @@ import com.example.vibe_mobile.API.RetrofitClient
 import com.example.vibe_mobile.API.Users.UserService
 import com.example.vibe_mobile.Clases.Ticket
 import com.example.vibe_mobile.Clases.TicketItem
+import com.example.vibe_mobile.Tools.Tools
 import com.example.vibe_mobile.ViewModel.TicketViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -70,8 +71,8 @@ class SecondFragment : Fragment() {
     @SuppressLint("SuspiciousIndentation")
     private fun getTicketsUser() {
         val apiService = RetrofitClient.createService(UserService::class.java)
-
-        val userId = 3 /* Cambiar cuando tenga el log in */
+        val user = Tools.getUser(requireContext()) ?: return
+        val userId = user.id
 
             lifecycleScope.launch {
                 try {
