@@ -8,4 +8,5 @@
     <color name="Background">#E8E7E1</color>
     <color name="degraded_colorOne">#FFFFFF</color>
     <color name="degraded_colorTwo">#E8E7E1</color>
+    <color name="brown">#443A34</color>
 </resources>

@@ -31,6 +31,7 @@ interface UserService {
     @GET("api/users/{id}/tickets")
     suspend fun getUserTickets(@Path("id") id: Int?): Response<UserTicketsResponse>
 
+
     @PUT("api/users/{id}")
     suspend fun modifyUser(
         @Path("id") userId: Int,
