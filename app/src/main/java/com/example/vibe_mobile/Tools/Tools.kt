@@ -23,7 +23,7 @@ object Tools {
         return if (userJson != null) Gson().fromJson(userJson, User::class.java) else null
     }
 
-    fun clearUser(context: Context) {
+    fun logOut(context: Context) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit().remove(KEY_USER).apply()
     }
