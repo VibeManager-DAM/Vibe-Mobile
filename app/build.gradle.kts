@@ -50,4 +50,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.material)
     implementation(libs.coil)
+    implementation(libs.glide)
 }
