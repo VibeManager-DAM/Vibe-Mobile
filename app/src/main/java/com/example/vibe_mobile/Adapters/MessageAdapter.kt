@@ -52,6 +52,14 @@ class MessageAdapter(
                     loadVideo(holder.sentVideo, url)
                 }
 
+                content.startsWith("AUD:") -> {
+                    val url = content.removePrefix("AUD:")
+                    holder.sentAudio.visibility = View.VISIBLE
+                    holder.sentAudio.setOnClickListener {
+                        playAudio(url)
+                    }
+                }
+
                 else -> {
                     holder.sentText.visibility = View.VISIBLE
                     holder.sentText.text = content
@@ -72,6 +80,14 @@ class MessageAdapter(
                     val url = content.removePrefix("VID:")
                     holder.receivedVideo.visibility = View.VISIBLE
                     loadVideo(holder.receivedVideo, url)
+                }
+
+                content.startsWith("AUD:") -> {
+                    val url = content.removePrefix("AUD:")
+                    holder.receivedAudio.visibility = View.VISIBLE
+                    holder.receivedAudio.setOnClickListener {
+                        playAudio(url)
+                    }
                 }
 
                 else -> {
@@ -100,6 +116,16 @@ class MessageAdapter(
         }
     }
 
+    private fun playAudio(url: String) {
+        val mediaPlayer = android.media.MediaPlayer().apply {
+            setDataSource(url)
+            prepare()
+            start()
+        }
+    }
+
+
+
     inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val receivedMessageLayout: FrameLayout = itemView.findViewById(R.id.receivedMessageLayout)
         val sentMessageLayout: FrameLayout = itemView.findViewById(R.id.sentMessageLayout)
@@ -112,5 +138,9 @@ class MessageAdapter(
 
         val receivedVideo: VideoView = itemView.findViewById(R.id.receivedVideo)
         val sentVideo: VideoView = itemView.findViewById(R.id.sentVideo)
+
+        val receivedAudio: ImageView = itemView.findViewById(R.id.receivedAudio)
+        val sentAudio: ImageView = itemView.findViewById(R.id.sentAudio)
+
     }
 }
