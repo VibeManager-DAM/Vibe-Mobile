@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vibe_mobile.API.RetrofitClient
 import com.example.vibe_mobile.API.Users.UserService
-import com.example.vibe_mobile.Clases.Ticket
+
 import com.example.vibe_mobile.Clases.TicketItem
 import com.example.vibe_mobile.Tools.Tools
 import com.example.vibe_mobile.ViewModel.TicketViewModel

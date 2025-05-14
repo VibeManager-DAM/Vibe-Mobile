@@ -60,6 +60,7 @@ class CardAdapter(
                 putExtra("capacity", item.capacity)
                 putExtra("image", item.image)
                 putExtra("time", item.time)
+                putExtra("id", item.id)
             }
             context.startActivity(intent)
         }

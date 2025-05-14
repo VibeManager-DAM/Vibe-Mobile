@@ -6,5 +6,6 @@ data class Ticket(
     val time: String,
     val num_row: Int,
     val num_col: Int,
-    val eventInfo: EventInfo
+    val eventInfo: EventInfo,
+    val id_user: Int
 )

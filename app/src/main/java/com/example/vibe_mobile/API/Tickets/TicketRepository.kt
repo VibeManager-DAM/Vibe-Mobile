@@ -1,8 +1,8 @@
 package com.example.vibe_mobile.API.Tickets
 import com.example.vibe_mobile.API.RetrofitClient
-import com.example.vibe_mobile.API.Users.UserService
+import com.example.vibe_mobile.Clases.ReserveTicket
 import com.example.vibe_mobile.Clases.Ticket
-import com.example.vibe_mobile.Clases.User
+import com.example.vibe_mobile.Clases.TicketResponse
 import retrofit2.Response
 
 class TicketRepository {
@@ -11,7 +11,7 @@ class TicketRepository {
         RetrofitClient.createService(TicketService::class.java)
     }
 
-    suspend fun createTicket(ticket: Ticket): Response<Ticket> {
-        return ticketService.createTicket(ticket)
+    suspend fun reserveTicket(ticket: ReserveTicket): Response<TicketResponse> {
+        return ticketService.reserveTicket(ticket)
     }
 }
