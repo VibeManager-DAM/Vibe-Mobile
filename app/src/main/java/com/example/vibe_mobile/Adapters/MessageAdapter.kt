@@ -1,5 +1,7 @@
 package com.example.vibe_mobile.Adapters
 
+import android.content.Context
+import android.media.MediaPlayer
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.vibe_mobile.Clases.Message
 import com.example.vibe_mobile.R
+import java.io.File
+import java.io.FileOutputStream
+import java.net.URL
 
 class MessageAdapter(
     private val messages: List<Message>,
@@ -56,7 +61,7 @@ class MessageAdapter(
                     val url = content.removePrefix("AUD:")
                     holder.sentAudio.visibility = View.VISIBLE
                     holder.sentAudio.setOnClickListener {
-                        playAudio(url)
+                        playAudio(url, holder.itemView.context)
                     }
                 }
 
@@ -86,7 +91,7 @@ class MessageAdapter(
                     val url = content.removePrefix("AUD:")
                     holder.receivedAudio.visibility = View.VISIBLE
                     holder.receivedAudio.setOnClickListener {
-                        playAudio(url)
+                        playAudio(url, holder.itemView.context)
                     }
                 }
 
@@ -116,13 +121,37 @@ class MessageAdapter(
         }
     }
 
-    private fun playAudio(url: String) {
-        val mediaPlayer = android.media.MediaPlayer().apply {
-            setDataSource(url)
-            prepare()
-            start()
-        }
+    private fun playAudio(url: String, context: Context) {
+        val localFile = File(context.cacheDir, "temp_audio.3gp")
+        Thread {
+            try {
+                val connection = URL(url).openConnection()
+                connection.connect()
+                val input = connection.getInputStream()
+                val output = FileOutputStream(localFile)
+
+                input.copyTo(output)
+
+                input.close()
+                output.close()
+
+                val mediaPlayer = MediaPlayer().apply {
+                    setDataSource(localFile.absolutePath)
+                    prepare()
+                    start()
+                }
+
+                mediaPlayer.setOnCompletionListener {
+                    it.release()
+                    localFile.delete()
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }.start()
     }
+
 
 
 

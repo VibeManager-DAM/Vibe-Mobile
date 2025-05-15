@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -29,7 +30,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
-import java.util.*
+import java.io.File
 
 class InsideChatActivity : AppCompatActivity() {
 
@@ -54,6 +55,10 @@ class InsideChatActivity : AppCompatActivity() {
     private var currentUserId: Int = DEFAULT_USER_ID
     private var chatId: Int = DEFAULT_CHAT_ID
     private val messages = mutableListOf<Message>()
+
+    private var mediaRecorder: MediaRecorder? = null
+    private var audioFilePath: String? = null
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -134,7 +139,6 @@ class InsideChatActivity : AppCompatActivity() {
                 1 -> openGallery(isVideo = false)
                 2 -> openGallery(isVideo = true)
                 3 -> recordAudio()
-                4 -> pickAudio()
             }
         }
         builder.show()
@@ -142,17 +146,85 @@ class InsideChatActivity : AppCompatActivity() {
 
 
     private fun recordAudio() {
-        val intent = Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION)
-        if (intent.resolveActivity(packageManager) != null) {
-            galleryLauncher.launch(intent)
+        if (!hasPermissions()) {
+            requestNecessaryPermissions()
+            return
+        }
+
+        var alertDialog: android.app.AlertDialog? = null
+
+        val recordingButton = TextView(this).apply {
+            text = "Comenzar grabación"
+            textSize = 18f
+            setPadding(50, 50, 50, 50)
+            setOnClickListener {
+                if (mediaRecorder == null) {
+                    startRecording(this)
+                } else {
+                    stopRecording()
+                    text = "Comenzar grabación"
+                    alertDialog?.dismiss()
+                }
+            }
+        }
+
+        val dialogBuilder = android.app.AlertDialog.Builder(this)
+            .setTitle("Grabar audio")
+            .setView(recordingButton)
+            .setCancelable(true)
+
+        alertDialog = dialogBuilder.create()
+        alertDialog.show()
+    }
+
+
+
+    private fun startRecording(button: TextView) {
+        val outputFile = File.createTempFile("audio_", ".3gp", cacheDir)
+        audioFilePath = outputFile.absolutePath
+
+        mediaRecorder = MediaRecorder().apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            setOutputFile(audioFilePath)
+
+            try {
+                prepare()
+                start()
+                button.text = "Detener grabación"
+            } catch (e: Exception) {
+                Log.e("RECORD", "Error al preparar MediaRecorder: ${e.message}")
+            }
         }
     }
 
-    private fun pickAudio() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "audio/*"
-        galleryLauncher.launch(intent)
+    private fun stopRecording() {
+        mediaRecorder?.apply {
+            try {
+                stop()
+                release()
+            } catch (e: Exception) {
+                Log.e("RECORD", "Error al detener grabación: ${e.message}")
+            }
+        }
+        mediaRecorder = null
+
+        audioFilePath?.let {
+            val fileUri = Uri.fromFile(File(it))
+            uploadImageToApi(fileUri, isImage = false)
+        }
     }
+
+    override fun onStop() {
+        super.onStop()
+        if (mediaRecorder != null) {
+            Log.w("RECORD", "Liberando MediaRecorder desde onStop")
+            stopRecording()
+        }
+    }
+
+
 
     private fun uploadImageToApi(uri: Uri, isImage: Boolean) {
         var type = contentResolver.getType(uri)
@@ -209,7 +281,7 @@ class InsideChatActivity : AppCompatActivity() {
 
 
     private fun openCamera() {
-        val intent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (intent.resolveActivity(packageManager) != null) {
             Log.d("CAMERA", "abriendo camara")
             cameraLauncher.launch(intent)
@@ -257,17 +329,17 @@ class InsideChatActivity : AppCompatActivity() {
     private fun requestNecessaryPermissions() {
         val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arrayOf(
-                android.Manifest.permission.CAMERA,
-                android.Manifest.permission.RECORD_AUDIO,
-                android.Manifest.permission.READ_MEDIA_IMAGES,
-                android.Manifest.permission.READ_MEDIA_AUDIO,
-                android.Manifest.permission.READ_MEDIA_VIDEO
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_AUDIO,
+                Manifest.permission.READ_MEDIA_VIDEO
                    )
         } else {
             arrayOf(
-                android.Manifest.permission.CAMERA,
-                android.Manifest.permission.RECORD_AUDIO,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.READ_EXTERNAL_STORAGE
                    )
         }
         requestPermissions(permissions, REQUEST_PERMISSIONS)
@@ -326,6 +398,6 @@ class InsideChatActivity : AppCompatActivity() {
     }
 
     private fun log(tag: String, msg: String) {
-        android.util.Log.d(tag, msg)
+        Log.d(tag, msg)
     }
 }
