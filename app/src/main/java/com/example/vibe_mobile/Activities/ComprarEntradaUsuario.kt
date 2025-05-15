@@ -26,6 +26,11 @@ class ComprarEntradaUsuario: AppCompatActivity() {
         setContentView(R.layout.comprar_entrada_usuario)
         val user = Tools.getUser(this) ?: return
 
+        val btn_back: AppCompatButton = findViewById(R.id.btn_back)
+        btn_back.setOnClickListener {
+            finish()
+        }
+
         // Recibimos los datos
         val title = intent.getStringExtra("title")
         val date = intent.getStringExtra("date")
@@ -47,7 +52,7 @@ class ComprarEntradaUsuario: AppCompatActivity() {
         }
 
         val btnComprarEntrada = findViewById<AppCompatButton>(R.id.cardBuy_btn)
-        // Agregar una animacion de gracias por comprar con nosotros o algo asi.
+
         // Listener
         btnComprarEntrada.setOnClickListener {
             val ReserveTicket = ReserveTicket(

@@ -1,8 +1,10 @@
 package com.example.vibe_mobile.Activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -13,11 +15,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
 
 class CrearCuentaActivity : AppCompatActivity() {
 
     private val userRepository = UserRepository()
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.crear_cuenta)
@@ -26,7 +30,13 @@ class CrearCuentaActivity : AppCompatActivity() {
         val nameField = findViewById<EditText>(R.id.user_name)
         val emailField = findViewById<EditText>(R.id.user_mail)
         val passwordField = findViewById<EditText>(R.id.user_password)
+        val btn_iniciarSesion = findViewById<TextView>(R.id.btn_iniciarSesion)
 
+        btn_iniciarSesion.setOnClickListener{
+            val intent = Intent(this, IniciarSesionActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
         btnCrear.setOnClickListener {
             val fullname = nameField.text.toString().trim()
             val email = emailField.text.toString().trim()

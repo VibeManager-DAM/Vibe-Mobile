@@ -4,18 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.lifecycleScope
 import com.example.vibe_mobile.API.RetrofitClient
-import com.example.vibe_mobile.API.Users.UserRepository
 import com.example.vibe_mobile.API.Users.UserService
 import com.example.vibe_mobile.Activities.IniciarSesionActivity
 import com.example.vibe_mobile.Clases.User
@@ -93,11 +89,11 @@ class FourthFragment : Fragment() {
             try {
                 val response = userService.modifyUser(user.id!!, updateRequest)
 
-                if (response.isSuccessful && response.body()?.success == true) {
-                    val usuarioActualizado = response.body()?.user
+                if (response.isSuccessful) {
+                    val usuarioActualizado = response.body()
                     Toast.makeText(requireContext(), "Usuario actualizado: ${usuarioActualizado?.fullname}", Toast.LENGTH_SHORT).show()
                 } else {
-                    val msg = response.body()?.message ?: "Error al actualizar"
+                    val msg = "Error al actualizar"
                     Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
@@ -107,6 +103,7 @@ class FourthFragment : Fragment() {
     }
 
     private fun showUserInfo(view: View) {
+
         val userName = view.findViewById<EditText>(R.id.user_nombre)
         val userMail = view.findViewById<EditText>(R.id.user_correo)
         val userPassword = view.findViewById<EditText>(R.id.user_contrasena)

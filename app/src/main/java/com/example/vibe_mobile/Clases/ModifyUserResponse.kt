@@ -1,7 +1,7 @@
 package com.example.vibe_mobile.Clases
 
 data class ModifyUserResponse(
-    val success: Boolean,
-    val message: String,
-    val user: User
+    val id: Int,
+    val fullname: String,
+    val email: String
 )

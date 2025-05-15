@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -16,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
 import java.io.File
 
 class IniciarSesionActivity : AppCompatActivity() {
@@ -30,6 +32,13 @@ class IniciarSesionActivity : AppCompatActivity() {
         val checkRemember = findViewById<CheckBox>(R.id.checkbox_remember)
         val emailField = findViewById<EditText>(R.id.user_correo)
         val passwordField = findViewById<EditText>(R.id.user_contrasena)
+        val btn_crearCuenta = findViewById<TextView>(R.id.btn_crearCuenta)
+
+        btn_crearCuenta.setOnClickListener{
+            val intent = Intent(this, CrearCuentaActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         btnIniciar.setOnClickListener {
             val email = emailField.text.toString().trim()
