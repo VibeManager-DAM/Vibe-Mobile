@@ -1,27 +1,36 @@
 package com.example.vibe_mobile.Activities
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.media.MediaRecorder
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vibe_mobile.API.UploadImage.UploadImageRepository
 import com.example.vibe_mobile.Adapters.MessageAdapter
 import com.example.vibe_mobile.Clases.Message
+import com.example.vibe_mobile.Clases.UploadImageResponse
 import com.example.vibe_mobile.R
-import com.example.vibe_mobile.Tools.CryptoUtils
+import com.example.vibe_mobile.Tools.ChatSocketService
 import com.example.vibe_mobile.Tools.Tools
-import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.PrintWriter
-import java.net.Socket
-import java.util.*
-import kotlin.concurrent.thread
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import retrofit2.Call
+import retrofit2.Response
+import java.io.File
 
 class InsideChatActivity : AppCompatActivity() {
 
@@ -29,9 +38,6 @@ class InsideChatActivity : AppCompatActivity() {
         private const val DEFAULT_CHAT_ID = -1
         private const val DEFAULT_USER_ID = -1
         private const val DEFAULT_RECEIVER_NAME = "Desconocido"
-        private const val SERVER_IP = "10.0.3.148"
-        private const val SERVER_PORT = 5000
-        private const val TAG_SOCKET = "SOCKET"
     }
 
     private lateinit var rootLayout: LinearLayout
@@ -39,15 +45,22 @@ class InsideChatActivity : AppCompatActivity() {
     private lateinit var messageInput: EditText
     private lateinit var eventNameChat: TextView
     private lateinit var backButton: ImageView
-    private lateinit var socket: Socket
-    private lateinit var outputStream: PrintWriter
-    private lateinit var inputStream: BufferedReader
+    private lateinit var addButton: ImageView
     private lateinit var adapter: MessageAdapter
 
+    private lateinit var cameraLauncher: androidx.activity.result.ActivityResultLauncher<Intent>
+    private lateinit var galleryLauncher: androidx.activity.result.ActivityResultLauncher<Intent>
+
+    private val REQUEST_PERMISSIONS = 3
     private var currentUserId: Int = DEFAULT_USER_ID
     private var chatId: Int = DEFAULT_CHAT_ID
     private val messages = mutableListOf<Message>()
 
+    private var mediaRecorder: MediaRecorder? = null
+    private var audioFilePath: String? = null
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -62,9 +75,274 @@ class InsideChatActivity : AppCompatActivity() {
         setupKeyboardListener()
         setupSendButton()
 
+        // Listeners de cámara y galería
+        cameraLauncher = registerForActivityResult(
+            androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
+                                                  ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val imageBitmap = result.data?.extras?.get("data") as? android.graphics.Bitmap
+                imageBitmap?.let {
+                    val uri = Tools.saveBitmapToTempFile(this, it)
+                    uri?.let { uploadImageToApi(it, isImage = true) }
+                }
+            }
+        }
+
+        galleryLauncher = registerForActivityResult(
+            androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
+                                                   ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val selectedUri = result.data?.data
+                selectedUri?.let {
+                    val mimeType = contentResolver.getType(it)
+                    val isImage = mimeType?.startsWith("image") == true
+                    uploadImageToApi(it, isImage)
+                }
+            }
+        }
+
+
+        // Iniciar servicio de socket
+        val serviceIntent = Intent(this, ChatSocketService::class.java).apply {
+            putExtra("user_id", currentUserId)
+            putExtra("chat_id", chatId)
+        }
+        startForegroundService(serviceIntent)
+
+        // Recibir mensajes
+        ChatSocketService.onNewMessage = { message ->
+            runOnUiThread {
+                messages.add(message)
+                adapter.notifyItemInserted(messages.size - 1)
+                chatRecyclerView.scrollToPosition(messages.size - 1)
+            }
+        }
+
         backButton.setOnClickListener { finish() }
 
-        connectToServer()
+        addButton.setOnClickListener {
+            if (hasPermissions()) {
+                showMediaOptions()
+            } else {
+                requestNecessaryPermissions()
+            }
+        }
+    }
+
+    private fun showMediaOptions() {
+        val options = arrayOf("Tomar foto", "Elegir imagen", "Elegir video", "Grabar audio", "Elegir audio")
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("Seleccionar medio")
+        builder.setItems(options) { _, which ->
+            when (which) {
+                0 -> openCamera()
+                1 -> openGallery(isVideo = false)
+                2 -> openGallery(isVideo = true)
+                3 -> recordAudio()
+            }
+        }
+        builder.show()
+    }
+
+
+    private fun recordAudio() {
+        if (!hasPermissions()) {
+            requestNecessaryPermissions()
+            return
+        }
+
+        var alertDialog: android.app.AlertDialog? = null
+
+        val recordingButton = TextView(this).apply {
+            text = "Comenzar grabación"
+            textSize = 18f
+            setPadding(50, 50, 50, 50)
+            setOnClickListener {
+                if (mediaRecorder == null) {
+                    startRecording(this)
+                } else {
+                    stopRecording()
+                    text = "Comenzar grabación"
+                    alertDialog?.dismiss()
+                }
+            }
+        }
+
+        val dialogBuilder = android.app.AlertDialog.Builder(this)
+            .setTitle("Grabar audio")
+            .setView(recordingButton)
+            .setCancelable(true)
+
+        alertDialog = dialogBuilder.create()
+        alertDialog.show()
+    }
+
+
+
+    private fun startRecording(button: TextView) {
+        val outputFile = File.createTempFile("audio_", ".3gp", cacheDir)
+        audioFilePath = outputFile.absolutePath
+
+        mediaRecorder = MediaRecorder().apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            setOutputFile(audioFilePath)
+
+            try {
+                prepare()
+                start()
+                button.text = "Detener grabación"
+            } catch (e: Exception) {
+                Log.e("RECORD", "Error al preparar MediaRecorder: ${e.message}")
+            }
+        }
+    }
+
+    private fun stopRecording() {
+        mediaRecorder?.apply {
+            try {
+                stop()
+                release()
+            } catch (e: Exception) {
+                Log.e("RECORD", "Error al detener grabación: ${e.message}")
+            }
+        }
+        mediaRecorder = null
+
+        audioFilePath?.let {
+            val fileUri = Uri.fromFile(File(it))
+            uploadImageToApi(fileUri, isImage = false)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (mediaRecorder != null) {
+            Log.w("RECORD", "Liberando MediaRecorder desde onStop")
+            stopRecording()
+        }
+    }
+
+
+
+    private fun uploadImageToApi(uri: Uri, isImage: Boolean) {
+        var type = contentResolver.getType(uri)
+        if (type == null) {
+            type = "audio/3gpp"
+        }
+
+        val inputStream = contentResolver.openInputStream(uri) ?: return
+        val requestFile = okhttp3.RequestBody.create(type.toMediaTypeOrNull(), inputStream.readBytes())
+
+        val extension = when {
+            type.startsWith("image/") -> when (type) {
+                "image/jpeg" -> ".jpg"
+                "image/png" -> ".png"
+                "image/gif" -> ".gif"
+                else -> ".img"
+            }
+            type.startsWith("video/") -> when (type) {
+                "video/mp4" -> ".mp4"
+                "video/3gpp" -> ".3gp"
+                else -> ".vid"
+            }
+            type.startsWith("audio/") -> when (type) {
+                "audio/mpeg" -> ".mp3"
+                "audio/wav" -> ".wav"
+                "audio/3gpp" -> ".3gp"
+                else -> ".aud"
+            }
+            else -> ".dat"
+        }
+
+        val fileName = "media_${System.currentTimeMillis()}$extension"
+        val filePart = MultipartBody.Part.createFormData("file", fileName, requestFile)
+
+        UploadImageRepository().uploadImage(filePart).enqueue(object : retrofit2.Callback<UploadImageResponse> {
+            override fun onResponse(call: Call<UploadImageResponse>, response: Response<UploadImageResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val mediaUrl = response.body()!!.url
+                    val prefix = when {
+                        type.startsWith("image/") -> "IMG:"
+                        type.startsWith("video/") -> "VID:"
+                        type.startsWith("audio/") -> "AUD:"
+                        else -> "FILE:"
+                    }
+                    sendMessage("$prefix$mediaUrl")
+                }
+            }
+
+            override fun onFailure(call: Call<UploadImageResponse>, t: Throwable) {
+                log("UPLOAD", "Error al subir archivo: ${t.message}")
+            }
+        })
+    }
+
+
+    private fun openCamera() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (intent.resolveActivity(packageManager) != null) {
+            Log.d("CAMERA", "abriendo camara")
+            cameraLauncher.launch(intent)
+        }
+    }
+
+    private fun openGallery(isVideo: Boolean) {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = if (isVideo) "video/*" else "image/*"
+        galleryLauncher.launch(intent)
+    }
+
+
+    private fun hasPermissions(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED
+        } else {
+            checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+                                           ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_PERMISSIONS) {
+            if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                showMediaOptions()
+            } else {
+                android.widget.Toast.makeText(this, "Debes conceder todos los permisos", android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+
+    private fun requestNecessaryPermissions() {
+        val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_AUDIO,
+                Manifest.permission.READ_MEDIA_VIDEO
+                   )
+        } else {
+            arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+                   )
+        }
+        requestPermissions(permissions, REQUEST_PERMISSIONS)
     }
 
     private fun initViews(eventTitle: String) {
@@ -73,7 +351,7 @@ class InsideChatActivity : AppCompatActivity() {
         messageInput = findViewById(R.id.messageInput)
         eventNameChat = findViewById(R.id.nameChat)
         backButton = findViewById(R.id.backButton)
-
+        addButton = findViewById(R.id.addButton)
         eventNameChat.text = eventTitle
     }
 
@@ -84,7 +362,7 @@ class InsideChatActivity : AppCompatActivity() {
     }
 
     private fun setupSendButton() {
-        val sendButton: ImageView = findViewById(R.id.sendButton) // Asegúrate de tener este ID
+        val sendButton: ImageView = findViewById(R.id.sendButton)
         sendButton.setOnClickListener {
             val messageText = messageInput.text.toString()
             if (messageText.isNotBlank()) {
@@ -93,100 +371,10 @@ class InsideChatActivity : AppCompatActivity() {
         }
     }
 
-    private fun connectToServer() {
-        thread(start = true) {
-            try {
-                socket = Socket(SERVER_IP, SERVER_PORT)
-                outputStream = PrintWriter(socket.getOutputStream(), true)
-                inputStream = BufferedReader(InputStreamReader(socket.getInputStream()))
-
-                val authJson = JSONObject().apply {
-                    put("sender_id", currentUserId)
-                    put("chat_id", chatId)
-                    put("content", "") // solo para cumplir con estructura
-                }
-                outputStream.println(authJson.toString())
-
-                runOnUiThread {
-                    log(TAG_SOCKET, "Conectado al servidor")
-                }
-
-                receiveMessages()
-
-            } catch (e: Exception) {
-                runOnUiThread {
-                    log(TAG_SOCKET, "Error al conectar: ${e.message}")
-                }
-            }
-        }
-    }
-
-    private fun receiveMessages() {
-        try {
-            while (socket.isConnected) {
-                val line = inputStream.readLine() // Asignamos el valor a 'line' aquí
-                if (line != null) {
-                    processIncomingMessage(line)
-                } else {
-                    // Si se ha recibido null, significa que se cerró la conexión
-                    break
-                }
-            }
-        } catch (e: Exception) {
-            log(TAG_SOCKET, "Error recibiendo datos: ${e.message}")
-        }
-    }
-
-
-    private fun processIncomingMessage(messageStr: String) {
-        try {
-            val json = JSONObject(messageStr)
-            val encryptedContent = json.getString("content")
-            val decryptedContent = CryptoUtils.decrypt(encryptedContent)
-
-            val newMessage = Message(
-                id = json.optInt("message_id", messages.size + 1),
-                context = decryptedContent,
-                send_at = json.optString("send_at", getCurrentTimestamp()),
-                sender_id = json.getInt("from"),
-                id_chat = chatId
-                                    )
-
-            runOnUiThread {
-                messages.add(newMessage)
-                adapter.notifyItemInserted(messages.size - 1)
-                chatRecyclerView.scrollToPosition(messages.size - 1)
-            }
-
-        } catch (e: Exception) {
-            log(TAG_SOCKET, "Error procesando mensaje: ${e.message}")
-        }
-    }
-
-
     private fun sendMessage(messageText: String) {
-        val encryptedText = CryptoUtils.encrypt(messageText)
-
-        val messageJson = JSONObject().apply {
-            put("sender_id", currentUserId)
-            put("chat_id", chatId)
-            put("content", encryptedText)
-        }
-
-        thread {
-            try {
-                outputStream.println(messageJson.toString())
-                runOnUiThread {
-                    messageInput.text.clear()
-                }
-            } catch (e: Exception) {
-                log(TAG_SOCKET, "Error enviando mensaje: ${e.message}")
-            }
-        }
+        ChatSocketService.sendMessage(messageText)
+        messageInput.text.clear()
     }
-
-
-
 
     private fun setupKeyboardListener() {
         val messageContainer: LinearLayout = findViewById(R.id.messageContainer)
@@ -206,22 +394,10 @@ class InsideChatActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        try {
-            if (::socket.isInitialized && !socket.isClosed) {
-                socket.close()
-            }
-        } catch (e: Exception) {
-            log(TAG_SOCKET, "Error cerrando socket: ${e.message}")
-        }
+        stopService(Intent(this, ChatSocketService::class.java))
     }
-
-    private fun getCurrentTimestamp(): String {
-        val formatter = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-        return formatter.format(Date())
-    }
-
 
     private fun log(tag: String, msg: String) {
-        android.util.Log.d(tag, msg)
+        Log.d(tag, msg)
     }
 }
