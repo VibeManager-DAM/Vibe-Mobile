@@ -130,7 +130,7 @@ class InsideChatActivity : AppCompatActivity() {
     }
 
     private fun showMediaOptions() {
-        val options = arrayOf("Tomar foto", "Elegir imagen", "Elegir video", "Grabar audio", "Elegir audio")
+        val options = arrayOf("Tomar foto", "Elegir imagen", "Elegir video", "Grabar audio")
         val builder = android.app.AlertDialog.Builder(this)
         builder.setTitle("Seleccionar medio")
         builder.setItems(options) { _, which ->

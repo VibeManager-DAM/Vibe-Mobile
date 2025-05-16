@@ -2,7 +2,6 @@ package com.example.vibe_mobile.API.Users
 import com.example.vibe_mobile.Clases.ChatPreview
 import com.example.vibe_mobile.Clases.ModifyUserResponse
 import com.example.vibe_mobile.Clases.RegisterResponse
-import com.example.vibe_mobile.Clases.Ticket
 import com.example.vibe_mobile.Clases.User
 import com.example.vibe_mobile.Clases.UserTicketsResponse
 import com.example.vibe_mobile.Clases.UserUpdateRequest

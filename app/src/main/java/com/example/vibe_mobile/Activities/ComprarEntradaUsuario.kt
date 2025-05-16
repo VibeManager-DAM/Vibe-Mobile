@@ -26,8 +26,8 @@ class ComprarEntradaUsuario: AppCompatActivity() {
         setContentView(R.layout.comprar_entrada_usuario)
         val user = Tools.getUser(this) ?: return
 
-        val btn_back: AppCompatButton = findViewById(R.id.btn_back)
-        btn_back.setOnClickListener {
+        val btnBack: AppCompatButton = findViewById(R.id.btn_back)
+        btnBack.setOnClickListener {
             finish()
         }
 

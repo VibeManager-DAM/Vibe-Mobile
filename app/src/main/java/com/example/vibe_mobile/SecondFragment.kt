@@ -1,6 +1,6 @@
 package com.example.vibe_mobile
 
-import TicketsAdapter
+import com.example.vibe_mobile.Adapters.TicketsAdapter
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
@@ -21,8 +21,6 @@ import com.example.vibe_mobile.Clases.TicketItem
 import com.example.vibe_mobile.Tools.Tools
 import com.example.vibe_mobile.ViewModel.TicketViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalTime
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

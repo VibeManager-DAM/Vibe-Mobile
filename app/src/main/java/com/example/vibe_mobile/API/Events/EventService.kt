@@ -1,7 +1,7 @@
 package com.example.vibe_mobile.API.Events
+
 import com.example.vibe_mobile.Clases.Event
 import com.example.vibe_mobile.Clases.Space
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 

@@ -5,9 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vibe_mobile.API.Users.UserRepository
-
 import com.example.vibe_mobile.Clases.TicketItem
-
 import kotlinx.coroutines.launch
 
 class TicketViewModel : ViewModel() {
