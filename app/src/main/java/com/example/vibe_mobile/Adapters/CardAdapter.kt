@@ -1,6 +1,7 @@
 package com.example.vibe_mobile.Adapters
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.view.LayoutInflater
@@ -9,19 +10,23 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.example.vibe_mobile.Activities.ComprarEntradaUsuario
+import com.example.vibe_mobile.Activities.ReservarEspacioGestor
 import com.example.vibe_mobile.Clases.Event
 import com.example.vibe_mobile.R
+import com.example.vibe_mobile.Tools.Tools
 import java.time.format.TextStyle
 import java.util.Locale
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class CardAdapter(
+    private val context: Context,
         private var itemList: List<Event>
 ) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
 
@@ -42,7 +47,6 @@ class CardAdapter(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val item = itemList[position]
-
         val fechaFormateada = formatearFecha(item.date)
 
         holder.fecha.text = fechaFormateada
@@ -53,8 +57,18 @@ class CardAdapter(
         }
 
         holder.boton.setOnClickListener {
+            val user = Tools.getUser(context) ?: return@setOnClickListener
             val context = holder.itemView.context
-            val intent = Intent(context, ComprarEntradaUsuario::class.java).apply {
+
+            val intent = when(user.id_rol) {
+                2 -> Intent(context, ComprarEntradaUsuario::class.java)
+                3 -> Intent(context, ComprarEntradaUsuario::class.java)
+                else -> {
+                    Toast.makeText(context, "Tu rol puede crear eventos", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+            }
+            intent.apply {
                 putExtra("title", item.title)
                 putExtra("date", item.date)
                 putExtra("price", item.price)

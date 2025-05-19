@@ -33,6 +33,15 @@
             android:name=".Activities.InsideChatActivity"
             android:exported="false" />
         <activity
+            android:name=".Activities.ReservarEspacioGestor"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.ReservarEleccionGestor"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.CrearEvento"
+            android:exported="false" />
+        <activity
             android:name=".FragmentActivity"
             android:exported="false" />
         <activity

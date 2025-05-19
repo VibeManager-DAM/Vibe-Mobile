@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.fragment.app.viewModels
 import com.example.vibe_mobile.ViewModels.EventViewModel
 import com.example.vibe_mobile.Clases.Event
+import com.example.vibe_mobile.Tools.Tools
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,20 +45,29 @@ class FirstFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         // Creamos una variable view para poder modificar la vista y creamos funciones
         // para mostrarlas.
         val view = inflater.inflate(R.layout.fragment_first, container, false)
         setupRecyclerView(view)
+
+        val user = Tools.getUser(requireContext())
+        if (user != null) {
+            if (user.id_rol == 1) {
+                // cambiar el buscador por un titulo "Tus eventos"
+
+                eventViewModel.fetchEventsOrganizer(user.id)
+            } else {
+                eventViewModel.fetchEvents()
+            }
+        }
         observeEvents()
-        eventViewModel.fetchEvents()
         return view
     }
 
     private fun setupRecyclerView(view: View) {
         recyclerView = view.findViewById(R.id.recyclerViewCard)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = CardAdapter(emptyList())
+        adapter = CardAdapter(requireContext(), emptyList())
         recyclerView.adapter = adapter
     }
 

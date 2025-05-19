@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/Background"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
@@ -25,5 +27,28 @@
         app:itemIconTint="@color/Verde_Oscuro"
         app:itemTextColor="@color/Verde_Oscuro"
         app:menu="@menu/navegation_menu" />
+
+    <FrameLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="80dp"
+        android:elevation="10dp"
+        android:translationZ="10dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_crearEvento"
+            android:background="@drawable/bg_oval"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+    <ImageView
+        android:background="@drawable/icon_plus"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="90dp"
+        android:elevation="20dp"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
