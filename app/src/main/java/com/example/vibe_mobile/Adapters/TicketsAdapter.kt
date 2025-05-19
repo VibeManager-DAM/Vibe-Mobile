@@ -1,3 +1,5 @@
+package com.example.vibe_mobile.Adapters
+
 import android.annotation.SuppressLint
 import android.os.Build
 import android.view.LayoutInflater

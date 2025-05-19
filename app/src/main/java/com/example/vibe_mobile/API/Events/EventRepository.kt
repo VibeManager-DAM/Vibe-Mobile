@@ -3,7 +3,6 @@ package com.example.vibe_mobile.API.Events
 import com.example.vibe_mobile.API.RetrofitClient
 import com.example.vibe_mobile.Clases.Event
 import com.example.vibe_mobile.Clases.Space
-
 import retrofit2.Response
 
 class EventRepository {

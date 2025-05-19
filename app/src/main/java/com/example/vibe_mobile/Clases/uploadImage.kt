@@ -1,9 +1,6 @@
 package com.example.vibe_mobile.Clases
 
-import android.Manifest
-import android.app.AlertDialog
 import android.content.Context
-import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -11,25 +8,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import coil.load
-import com.example.vibe_mobile.API.RetrofitClient
 import com.example.vibe_mobile.API.UploadImage.UploadImageRepository
-import com.example.vibe_mobile.MainActivity
 import com.example.vibe_mobile.R
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.ResponseBody
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -86,35 +74,6 @@ class uploadImage : Fragment() {
         val rootView = inflater.inflate(R.layout.card_item, container, false)
 
         card_image = rootView.findViewById(R.id.card_image)
-
-//        userImg = rootView.findViewById(R.id.ImgUserProfile)
-//        userImg.load(MainActivity.UserSession.urlImg)
-//        cameraImageUri = "".toUri()
-//
-//        val btnReturn = rootView.findViewById<ImageButton>(R.id.ImgBtnReturn)
-//        val btnGalery = rootView.findViewById<Button>(R.id.BtnChangeImgGalery)
-//        val btnCamera = rootView.findViewById<Button>(R.id.BtnChangeImgCamara)
-//        val btnSave = rootView.findViewById<Button>(R.id.BtnSave)
-//
-//        btnReturn.setOnClickListener {
-//            requireActivity().supportFragmentManager.popBackStack()
-//        }
-//
-//        btnGalery.setOnClickListener {
-//            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-//            pickImageLauncher.launch("image/*")
-//        }
-//
-//        btnCamera.setOnClickListener {
-//            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-//            cameraImageUri = createImageUri(requireContext())
-//            takePictureLauncher.launch(cameraImageUri)
-//        }
-//
-//        btnSave.setOnClickListener {
-//            uploadImageToServer(cameraImageUri, rootView)
-//            requireActivity().supportFragmentManager.popBackStack()
-//        }
 
         return rootView
     }

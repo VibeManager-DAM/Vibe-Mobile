@@ -1,4 +1,3 @@
-// ChatSocketService.kt
 package com.example.vibe_mobile.Tools
 
 import android.app.Notification
@@ -12,7 +11,6 @@ import androidx.core.app.NotificationCompat
 import com.example.vibe_mobile.Clases.Message
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.BufferedReader
