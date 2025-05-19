@@ -7,10 +7,33 @@
     >
 
     <ImageView
+        android:id="@+id/cardBuy_img"
         android:layout_width="match_parent"
         android:layout_height="595dp"
         android:src="@drawable/evento_image"
         android:scaleType="centerCrop"
+        />
+
+    <FrameLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="36dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_back"
+            android:background="@drawable/bg_oval"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+
+    <ImageView
+        android:background="@drawable/icon_flecha_atras"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="46dp"
+        android:layout_gravity="start"
         />
 
     <FrameLayout
@@ -29,6 +52,7 @@
         >
 
         <TextView
+            android:id="@+id/cardBuy_title"
             android:layout_width="218dp"
             android:layout_height="wrap_content"
             android:text="Mauris pretium orci feugiat urna elementum euismod"
@@ -37,6 +61,7 @@
             android:layout_margin="16dp"
             />
         <TextView
+            android:id="@+id/cardBuy_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="€50.00"
@@ -59,6 +84,7 @@
                 android:layout_marginTop="2dp"
                 />
             <TextView
+                android:id="@+id/cardBuy_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sunday 18 May 2025"
@@ -72,6 +98,7 @@
                 android:layout_marginTop="2dp"
                 />
             <TextView
+                android:id="@+id/cardBuy_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12:00 PM"
@@ -85,6 +112,7 @@
                 android:layout_marginStart="284dp"
                 android:fontFamily="@font/lato_light"/>
             <TextView
+                android:id="@+id/cardBuy_capacidad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="100"
@@ -108,6 +136,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="170dp"/>
         <TextView
+            android:id="@+id/cardBuy_description"
             android:layout_width="347dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16sp"
@@ -116,7 +145,7 @@
             />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_iniciarSesion"
+            android:id="@+id/cardBuy_btn"
             style="@style/CustomButton"
             android:layout_width="354dp"
             android:layout_height="50dp"

@@ -1,19 +1,26 @@
 package com.example.vibe_mobile
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import com.example.vibe_mobile.Activities.CrearEvento
+import com.example.vibe_mobile.Activities.IniciarSesionActivity
+import com.example.vibe_mobile.ViewModels.EventViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class FragmentActivity : AppCompatActivity() {
 
     lateinit var navegation : BottomNavigationView
-
+    private val viewModelEvents: EventViewModel by viewModels()
     private val mOnNavMenu = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.itemFragmentHome -> {
@@ -58,12 +65,20 @@ class FragmentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.navegation)
 
+        val btn_crearEvento: AppCompatButton = findViewById(R.id.btn_crearEvento)
         navegation = findViewById(R.id.navMenu)
         navegation.setOnNavigationItemSelectedListener(mOnNavMenu)
 
         val ticketFragment = intent.getStringExtra("ticketFragment")
         val ticketTitle = intent.getStringExtra("ticketEventTitle")
         val ticketImage = intent.getStringExtra("ticketEventImage")
+
+
+
+        btn_crearEvento.setOnClickListener{
+            val intent = Intent(this, CrearEvento::class.java)
+            startActivity(intent)
+        }
 
         // Set default fragment
         if (savedInstanceState == null) {

@@ -12,5 +12,5 @@ data class Event(
     val price: Double,
     val num_rows: Int?,
     val num_columns: Int?,
-    val id_organizer: Int
+    val id_organizer: Int?
 )
