@@ -111,12 +111,14 @@ class InsideChatActivity : AppCompatActivity() {
 
         // Recibir mensajes
         ChatSocketService.onNewMessage = { message ->
+            Log.d("CHAT_RECEIVED", "Mensaje recibido: ${message.context} de ${message.sender_id}")
             runOnUiThread {
                 messages.add(message)
                 adapter.notifyItemInserted(messages.size - 1)
                 chatRecyclerView.scrollToPosition(messages.size - 1)
             }
         }
+
 
         backButton.setOnClickListener { finish() }
 
@@ -130,7 +132,7 @@ class InsideChatActivity : AppCompatActivity() {
     }
 
     private fun showMediaOptions() {
-        val options = arrayOf("Tomar foto", "Elegir imagen", "Elegir video", "Grabar audio", "Elegir audio")
+        val options = arrayOf("Tomar foto", "Elegir imagen", "Elegir video", "Grabar audio")
         val builder = android.app.AlertDialog.Builder(this)
         builder.setTitle("Seleccionar medio")
         builder.setItems(options) { _, which ->
@@ -394,6 +396,7 @@ class InsideChatActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        ChatSocketService.onNewMessage = null
         stopService(Intent(this, ChatSocketService::class.java))
     }
 

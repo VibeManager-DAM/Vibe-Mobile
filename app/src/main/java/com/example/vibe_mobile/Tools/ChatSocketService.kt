@@ -35,7 +35,7 @@ class ChatSocketService : Service() {
     companion object {
         private const val CHANNEL_ID = "ChatSocketServiceChannel"
         private const val SERVER_IP = "10.0.3.148"
-        private const val SERVER_PORT = 5000
+        private const val SERVER_PORT = 9696
 
         var onNewMessage: ((Message) -> Unit)? = null
         var onLog: ((String) -> Unit)? = null
@@ -46,17 +46,23 @@ class ChatSocketService : Service() {
 
         fun sendMessage(content: String) {
             instance?.let {
-                it.serviceScope.launch {
-                    val encrypted = CryptoUtils.encrypt(content)
-                    val messageJson = JSONObject().apply {
-                        put("sender_id", it.currentUserId)
-                        put("chat_id", it.chatId)
-                        put("content", encrypted)
+                if (it.socket?.isConnected == true && it.socket?.isClosed == false) {
+                    it.serviceScope.launch {
+                        val encrypted = CryptoUtils.encrypt(content)
+                        val messageJson = JSONObject().apply {
+                            put("sender_id", it.currentUserId)
+                            put("chat_id", it.chatId)
+                            put("content", encrypted)
+                        }
+                        it.outputStream?.println(messageJson.toString())
                     }
-                    it.outputStream?.println(messageJson.toString())
+                } else {
+                    onLog?.invoke("[Service] No se puede enviar mensaje: socket desconectado")
                 }
             }
         }
+
+
 
         private var instance: ChatSocketService? = null
     }
