@@ -19,9 +19,22 @@
 
         <ImageView
             android:id="@+id/receivedImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <VideoView
+            android:id="@+id/receivedVideo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/receivedAudio"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon_audio"
             android:visibility="gone" />
 
         <TextView
@@ -44,7 +57,6 @@
         android:background="@drawable/sent_message"
         android:padding="8dp"
         android:layout_gravity="end">
-
         <TextView
             android:id="@+id/sentText"
             android:layout_width="wrap_content"
@@ -56,10 +68,26 @@
 
         <ImageView
             android:id="@+id/sentImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:scaleType="centerCrop"
             android:visibility="gone" />
+
+        <!-- Audio enviado -->
+        <ImageView
+            android:id="@+id/sentAudio"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon_audio"
+            android:visibility="gone" />
+
+
+        <VideoView
+            android:id="@+id/sentVideo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:visibility="gone" />
+
     </FrameLayout>
 
 </FrameLayout>

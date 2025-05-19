@@ -9,7 +9,7 @@ import com.example.vibe_mobile.Clases.Event
 import com.example.vibe_mobile.Clases.EventCreate
 import kotlinx.coroutines.launch
 
-class EventViewModel : ViewModel() {
+class  EventViewModel : ViewModel() {
     private val repository = EventRepository()
 
     private val _events = MutableLiveData<List<Event>>()

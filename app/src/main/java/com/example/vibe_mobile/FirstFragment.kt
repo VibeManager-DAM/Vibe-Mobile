@@ -1,6 +1,6 @@
 package com.example.vibe_mobile
 
-import CardAdapter
+import com.example.vibe_mobile.Adapters.CardAdapter
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.fragment.app.viewModels
 import com.example.vibe_mobile.ViewModels.EventViewModel
-import coil.load
 import com.example.vibe_mobile.Clases.Event
 import com.example.vibe_mobile.Tools.Tools
 

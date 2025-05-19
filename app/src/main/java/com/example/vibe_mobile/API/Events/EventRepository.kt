@@ -5,7 +5,6 @@ import com.example.vibe_mobile.Clases.CreateEventResponse
 import com.example.vibe_mobile.Clases.Event
 import com.example.vibe_mobile.Clases.EventCreate
 import com.example.vibe_mobile.Clases.Space
-
 import retrofit2.Response
 
 class EventRepository {

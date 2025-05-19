@@ -1,7 +1,7 @@
 package com.example.vibe_mobile.API.Tickets
+
 import com.example.vibe_mobile.API.RetrofitClient
 import com.example.vibe_mobile.Clases.ReserveTicket
-import com.example.vibe_mobile.Clases.Ticket
 import com.example.vibe_mobile.Clases.TicketResponse
 import retrofit2.Response
 

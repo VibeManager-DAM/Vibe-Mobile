@@ -1,13 +1,19 @@
 package com.example.vibe_mobile.Adapters
 
+import android.content.Context
+import android.media.MediaPlayer
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.vibe_mobile.Clases.Message
 import com.example.vibe_mobile.R
+import java.io.File
+import java.io.FileOutputStream
+import java.net.URL
 
 class MessageAdapter(
     private val messages: List<Message>,
@@ -24,19 +30,130 @@ class MessageAdapter(
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val message = messages[position]
+        val content = message.context
+
+        // Resetear visibilidades
+        holder.sentText.visibility = View.GONE
+        holder.sentImage.visibility = View.GONE
+        holder.sentVideo.visibility = View.GONE
+        holder.receivedText.visibility = View.GONE
+        holder.receivedImage.visibility = View.GONE
+        holder.receivedVideo.visibility = View.GONE
 
         if (message.sender_id == currentUserId) {
-            // Mensaje enviado por el usuario actual
             holder.sentMessageLayout.visibility = View.VISIBLE
             holder.receivedMessageLayout.visibility = View.GONE
-            holder.sentText.text = message.context
+
+            when {
+                content.startsWith("IMG:") -> {
+                    val url = content.removePrefix("IMG:")
+                    holder.sentImage.visibility = View.VISIBLE
+                    loadImage(holder.sentImage, url)
+                }
+
+                content.startsWith("VID:") -> {
+                    val url = content.removePrefix("VID:")
+                    holder.sentVideo.visibility = View.VISIBLE
+                    loadVideo(holder.sentVideo, url)
+                }
+
+                content.startsWith("AUD:") -> {
+                    val url = content.removePrefix("AUD:")
+                    holder.sentAudio.visibility = View.VISIBLE
+                    holder.sentAudio.setOnClickListener {
+                        playAudio(url, holder.itemView.context)
+                    }
+                }
+
+                else -> {
+                    holder.sentText.visibility = View.VISIBLE
+                    holder.sentText.text = content
+                }
+            }
         } else {
-            // Mensaje recibido
-            holder.receivedMessageLayout.visibility = View.VISIBLE
             holder.sentMessageLayout.visibility = View.GONE
-            holder.receivedText.text = message.context
+            holder.receivedMessageLayout.visibility = View.VISIBLE
+
+            when {
+                content.startsWith("IMG:") -> {
+                    val url = content.removePrefix("IMG:")
+                    holder.receivedImage.visibility = View.VISIBLE
+                    loadImage(holder.receivedImage, url)
+                }
+
+                content.startsWith("VID:") -> {
+                    val url = content.removePrefix("VID:")
+                    holder.receivedVideo.visibility = View.VISIBLE
+                    loadVideo(holder.receivedVideo, url)
+                }
+
+                content.startsWith("AUD:") -> {
+                    val url = content.removePrefix("AUD:")
+                    holder.receivedAudio.visibility = View.VISIBLE
+                    holder.receivedAudio.setOnClickListener {
+                        playAudio(url, holder.itemView.context)
+                    }
+                }
+
+                else -> {
+                    holder.receivedText.visibility = View.VISIBLE
+                    holder.receivedText.text = content
+                }
+            }
         }
     }
+
+    private fun loadImage(imageView: ImageView, url: String) {
+        Glide.with(imageView.context)
+            .load(url)
+            .into(imageView)
+    }
+
+    private fun loadVideo(videoView: VideoView, url: String) {
+        videoView.setVideoURI(Uri.parse(url))
+        videoView.setOnPreparedListener { mp ->
+            mp.isLooping = true
+            videoView.start()
+        }
+        videoView.setOnClickListener {
+            if (videoView.isPlaying) videoView.pause()
+            else videoView.start()
+        }
+    }
+
+    private fun playAudio(url: String, context: Context) {
+        val localFile = File(context.cacheDir, "temp_audio.3gp")
+        Thread {
+            try {
+                val connection = URL(url).openConnection()
+                connection.connect()
+                val input = connection.getInputStream()
+                val output = FileOutputStream(localFile)
+
+                input.copyTo(output)
+
+                input.close()
+                output.close()
+
+                val mediaPlayer = MediaPlayer().apply {
+                    setDataSource(localFile.absolutePath)
+                    prepare()
+                    start()
+                }
+
+                mediaPlayer.setOnCompletionListener {
+                    it.release()
+                    localFile.delete()
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }.start()
+    }
+
+
+
 
     inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val receivedMessageLayout: FrameLayout = itemView.findViewById(R.id.receivedMessageLayout)
@@ -44,5 +161,15 @@ class MessageAdapter(
 
         val receivedText: TextView = itemView.findViewById(R.id.receivedText)
         val sentText: TextView = itemView.findViewById(R.id.sentText)
+
+        val receivedImage: ImageView = itemView.findViewById(R.id.receivedImage)
+        val sentImage: ImageView = itemView.findViewById(R.id.sentImage)
+
+        val receivedVideo: VideoView = itemView.findViewById(R.id.receivedVideo)
+        val sentVideo: VideoView = itemView.findViewById(R.id.sentVideo)
+
+        val receivedAudio: ImageView = itemView.findViewById(R.id.receivedAudio)
+        val sentAudio: ImageView = itemView.findViewById(R.id.sentAudio)
+
     }
 }

@@ -17,7 +17,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.w3c.dom.Text
 import java.io.File
 
 class IniciarSesionActivity : AppCompatActivity() {
@@ -28,19 +27,19 @@ class IniciarSesionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.incio_sesion)
 
-        val btnIniciar = findViewById<AppCompatButton>(R.id.btn_iniciarSesion)
+        val btnStart = findViewById<AppCompatButton>(R.id.btn_iniciarSesion)
         val checkRemember = findViewById<CheckBox>(R.id.checkbox_remember)
         val emailField = findViewById<EditText>(R.id.user_correo)
         val passwordField = findViewById<EditText>(R.id.user_contrasena)
-        val btn_crearCuenta = findViewById<TextView>(R.id.btn_crearCuenta)
+        val btnCreateAccount = findViewById<TextView>(R.id.btn_crearCuenta)
 
-        btn_crearCuenta.setOnClickListener{
+        btnCreateAccount.setOnClickListener{
             val intent = Intent(this, CrearCuentaActivity::class.java)
             startActivity(intent)
             finish()
         }
 
-        btnIniciar.setOnClickListener {
+        btnStart.setOnClickListener {
             val email = emailField.text.toString().trim()
             val password = passwordField.text.toString().trim()
 

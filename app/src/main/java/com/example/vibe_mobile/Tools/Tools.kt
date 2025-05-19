@@ -1,8 +1,13 @@
 package com.example.vibe_mobile.Tools
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
+import androidx.core.content.FileProvider
 import com.example.vibe_mobile.Clases.User
 import com.google.gson.Gson
+import java.io.File
+import java.io.FileOutputStream
 
 object Tools {
 
@@ -27,4 +32,19 @@ object Tools {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit().remove(KEY_USER).apply()
     }
+
+    fun saveBitmapToTempFile(context: Context, bitmap: Bitmap): Uri? {
+        return try {
+            val file = File(context.cacheDir, "temp_image_${System.currentTimeMillis()}.jpg")
+            val out = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+            out.flush()
+            out.close()
+            FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
 }

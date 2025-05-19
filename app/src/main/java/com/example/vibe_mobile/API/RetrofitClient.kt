@@ -3,7 +3,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "http://10.0.3.148/api/" // Cambiar al dominio real (IP del PC)
+    private const val BASE_URL = "http://10.0.3.148/api/"
 
     private val retrofit: Retrofit by lazy {
 
